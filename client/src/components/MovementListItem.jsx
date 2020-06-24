@@ -54,7 +54,7 @@ const MovementListItem = ({
   const followersString = followers ? followers.toLocaleString() : 0;
   const emailCountString = emailCount ? emailCount.toLocaleString() : 0;
   const textCountString = textCount ? textCount.toLocaleString() : 0;
-
+  const eventCountString = 0;
   return (
     <div className="max-w-sm h-full rounded overflow-hidden shadow-lg m-8 float-left">
       <Link to={`/movement/${id}`} onClick={() => handleMovementTitleClick(id)}>
@@ -98,6 +98,8 @@ const MovementListItem = ({
               <p className="text-gray-600">FOLLOWERS: {followersString}</p>
               <p className="text-gray-600">EMAILS SENT: {emailCountString}</p>
               <p className="text-gray-600">TEXTS SENT: {textCountString}</p>
+              <br />
+              <p className="text-gray-600">EVENTS: {eventCountString}</p>
             </div>
           </div>
         </div>
