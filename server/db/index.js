@@ -92,6 +92,24 @@ const User = sequelize.define('user', {
   status: { type: Sequelize.ENUM('active', 'inactive'), defaultValue: 'active' },
 }, { underscored: true }); // convert camelCase column names to snake_case in db
 
+const Group = sequelize.define('group', {
+  username: { type: DataTypes.STRING, allowNull: false, unique: true },
+  hash: { type: DataTypes.STRING, allowNull: false },
+  salt: { type: DataTypes.STRING, allowNull: false },
+  firstName: { type: DataTypes.STRING, allowNull: true },
+  lastName: { type: DataTypes.STRING, allowNull: true },
+  location: { type: DataTypes.STRING, allowNull: true },
+  email: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  phoneNumber: { type: DataTypes.STRING },
+  imageUrl: { type: DataTypes.STRING },
+  bio: { type: DataTypes.TEXT },
+  lastLogin: { type: DataTypes.DATE },
+  status: { type: Sequelize.ENUM('active', 'inactive'), defaultValue: 'active' },
+}, { underscored: true }); // convert camelCase column names to snake_case in db
+
 const Movement = sequelize.define('movement', {
   // movement info
   name: { type: DataTypes.STRING, allowNull: false },
@@ -152,6 +170,7 @@ Comment.belongsTo(User, { foreignKey: 'id_user' });
 module.exports = {
   sequelize,
   User,
+  Group,
   Movement,
   Comment,
   UserMovement,
