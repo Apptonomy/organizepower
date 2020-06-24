@@ -53,6 +53,15 @@ const getUserByUsername = async(username) => {
   }
 };
 
+const getGroupByName = async(groupName) => {
+  try {
+    const group = await Group.findOne({ where: { groupName } });
+    return group;
+  } catch (err) {
+    console.error(err);
+  }
+};
+
 // GET USER BY ID
 const getUserById = async(userId) => {
   try {
@@ -268,6 +277,7 @@ module.exports = {
   editUserField,
   getUserById,
   getUserByUsername,
+  getGroupByName,
   getMovement,
   getAllMovements,
   getMovementsLedByUser,
