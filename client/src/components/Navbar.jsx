@@ -14,6 +14,7 @@ import Login from './Login.jsx';
 import Movement from './Movement.jsx';
 import SignUp from './SignUp.jsx';
 import PrivateRoute from './PrivateRoute.jsx';
+import Chat from './Chat.jsx';
 import {
   // getMovementsLeading,
   // getMovementsFollowing,
@@ -63,6 +64,9 @@ const Navbar = () => {
               </NavLink>
               <NavLink to={`/profile/${userId}`} className="block mt-4 lg:inline-block lg:mt-0 text-gray-400 hover:text-white mr-4">
                 PROFILE
+              </NavLink>
+              <NavLink to={`/chat/${userId}`} className="block mt-4 lg:inline-block lg:mt-0 text-gray-400 hover:text-white mr-4">
+                CHAT
               </NavLink>
               {!isAuthenticated
                 && (
@@ -114,6 +118,15 @@ const Navbar = () => {
             user={user}
             handleMovementTitleClick={handleMovementTitleClick}
             isAuthenticated={isAuthenticated}
+          />
+          <Route
+            exact
+            path={`/chat/${userId}`}
+            render={() => (
+              <Chat
+                user={user}
+              />
+            )}
           />
           <Route
             exact
