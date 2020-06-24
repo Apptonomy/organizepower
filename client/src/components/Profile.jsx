@@ -3,6 +3,7 @@ import moment from 'moment';
 import { Link } from 'react-router-dom';
 import MovementList from './MovementList.jsx';
 import StartMovement from './StartMovement.jsx';
+import MyCalendar from './Calendar.jsx';
 import { getMovementsLeading, getMovementsFollowing } from '../services/services';
 
 const Profile = ({ user, handleMovementTitleClick }) => {
@@ -81,6 +82,7 @@ const Profile = ({ user, handleMovementTitleClick }) => {
           />
         </div>
       </div>
+      <MyCalendar />
     </div>
   );
 };
