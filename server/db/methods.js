@@ -2,6 +2,7 @@
 const {
   sequelize,
   User,
+  Group,
   Movement,
   UserMovement,
   Comment,
@@ -28,6 +29,15 @@ const {
 const addUser = async(userObj) => {
   try {
     await User.create(userObj);
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+// ADD A GROUP
+const addGroup = async(groupObj) => {
+  try {
+    await Group.create(groupObj);
   } catch (err) {
     console.error(err);
   }
@@ -250,6 +260,7 @@ module.exports = {
   addMovement,
   addPolitician,
   addUser,
+  addGroup,
   linkUserMovement,
   editMovement,
   editMovementField,

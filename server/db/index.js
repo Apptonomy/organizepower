@@ -93,11 +93,7 @@ const User = sequelize.define('user', {
 }, { underscored: true }); // convert camelCase column names to snake_case in db
 
 const Group = sequelize.define('group', {
-  username: { type: DataTypes.STRING, allowNull: false, unique: true },
-  hash: { type: DataTypes.STRING, allowNull: false },
-  salt: { type: DataTypes.STRING, allowNull: false },
-  firstName: { type: DataTypes.STRING, allowNull: true },
-  lastName: { type: DataTypes.STRING, allowNull: true },
+  name: { type: DataTypes.STRING, allowNull: false, unique: true },
   location: { type: DataTypes.STRING, allowNull: true },
   email: {
     type: DataTypes.STRING,
