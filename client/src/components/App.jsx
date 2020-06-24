@@ -5,7 +5,10 @@ import Navbar from './Navbar.jsx';
 const App = () => {
   return (
     <div>
-      <Navbar />
+      <link rel="stylesheet" href="https://formden.com/static/cdn/bootstrap-iso.css" />
+      <div>
+        <Navbar />
+      </div>
     </div>
   );
 };
