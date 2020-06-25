@@ -174,9 +174,6 @@ const Movement = ({
           </div>
         </div>
       </div>
-      <div>
-        <MyCalendar />
-      </div>
       <Link to="/explore" className="text-gray-500 text-sm my-2 italic">← Return to Explore Page</Link>
     </div>
   );
