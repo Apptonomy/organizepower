@@ -5,6 +5,7 @@ import MovementList from './MovementList.jsx';
 import StartMovement from './StartMovement.jsx';
 import MyCalendar from './Calendar.jsx';
 import { getMovementsLeading, getMovementsFollowing } from '../services/services';
+import FullScreenDialog from './CalendarWindow.jsx';
 
 const Profile = ({ user, handleMovementTitleClick }) => {
   const {
@@ -82,7 +83,7 @@ const Profile = ({ user, handleMovementTitleClick }) => {
           />
         </div>
       </div>
-      <MyCalendar />
+      <FullScreenDialog />
     </div>
   );
 };
