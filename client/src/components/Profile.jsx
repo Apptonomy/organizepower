@@ -54,6 +54,7 @@ const Profile = ({ user, handleMovementTitleClick }) => {
         <div className="m-4">
           <button onClick={() => setStartMovementClicked(!startMovementClicked)} className="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 mb-8 border border-gray-400 rounded shadow mr-4">Start a Movement</button>
           <Link to="/explore"><button className="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 mb-8 border border-gray-400 rounded shadow mr-4">Join a Movement</button></Link>
+          <FullScreenDialog />
           {startMovementClicked && (
             <div className="">
               <StartMovement
@@ -83,7 +84,6 @@ const Profile = ({ user, handleMovementTitleClick }) => {
           />
         </div>
       </div>
-      <FullScreenDialog />
     </div>
   );
 };
