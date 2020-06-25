@@ -9,6 +9,7 @@ import Calendar from './Calendar.jsx';
 
 const useStyles = makeStyles((theme) => ({
   appBar: {
+    backgroundColor: 'black',
     position: 'relative',
   },
   title: {
@@ -36,7 +37,7 @@ const FullScreenDialog = () => {
   return (
     <div>
       <Button variant="outlined" color="primary" onClick={handleClickOpen}>
-        Open full-screen dialog
+        Events
       </Button>
       <Dialog fullScreen open={open} onClose={handleClose} TransitionComponent={Transition}>
         <AppBar className={classes.appBar}>
