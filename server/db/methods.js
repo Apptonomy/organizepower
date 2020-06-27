@@ -4,6 +4,7 @@ const {
   User,
   Movement,
   UserMovement,
+  Event,
   Comment,
 } = require('./index');
 
@@ -245,9 +246,61 @@ const addPolitician = async(politicianObj) => {
   }
 };
 
+// add new event
+// one to many relationship
+const addEvent = async(eventObj, moveId) => {
+  // get the movement id
+  try {
+    const movement = await Movement.findOne({ where: { id: moveId } });
+    // create the event
+    const event = await Event.create(eventObj);
+    // set the movement foreign key
+    event.setMove(movement);
+    return event;
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+// get event by id
+const getEvent = async(eventId) => {
+  try {
+    const event = await Event.findOne({
+      where: { id: eventId },
+      raw: true, // returns just the object from the db
+    });
+    return event;
+  } catch (err) {
+    console.error('Error getting single event', err);
+  }
+};
+
+// get all events for a movement
+const getAllEvents = async() => {
+  try {
+    const events = await Event.findAll({
+      raw: true,
+    });
+    return events;
+  } catch (err) {
+    console.error('Error getting all events for single movement', err);
+  }
+};
+
+// ADD TO EMAIL COUNT
+const addRSVPCount = async(eventId) => {
+  try {
+    await Event.update({ RSVPCount: sequelize.literal('rsvp_count + 1') },
+      { where: { id: eventId } });
+  } catch (err) {
+    console.error('Error increasing rvsp count for event', err);
+  }
+};
+
 module.exports = {
 
   addMovement,
+  addEvent,
   addPolitician,
   addUser,
   linkUserMovement,
@@ -261,8 +314,11 @@ module.exports = {
   getAllMovements,
   getMovementsLedByUser,
   getMovementsFollowedByUser,
+  getEvent,
+  getAllEvents,
   addEmailCount,
   addTextCount,
+  addRSVPCount,
   addFollower,
   addComment,
   getComments,
