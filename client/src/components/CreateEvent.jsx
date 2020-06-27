@@ -3,20 +3,64 @@ import axios from 'axios';
 
 // Imports to create custom time and date pickers using moment as the utility library
 import { MuiPickersUtilsProvider, KeyboardDatePicker, KeyboardTimePicker } from '@material-ui/pickers';
+import lightBlue from '@material-ui/core/colors/lightBlue';
+import AccessTimeIcon from '@material-ui/icons/AccessTime';
+import { ThemeProvider } from '@material-ui/styles';
 import MomentUtils from '@date-io/moment';
 
 // Imports to create dialogs using material-ui and provide page transition functionality
 import { makeStyles } from '@material-ui/core/styles';
 import CloseIcon from '@material-ui/icons/Close';
+import AddIcon from '@material-ui/icons/Add';
 import {
-  Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle,
-  FormControl, FormControlLabel, InputLabel, TextField, MenuItem, Select, Switch,
-  Divider, AppBar, Toolbar, IconButton, Typography, Grid,
+  Button, Dialog, DialogActions, DialogContent,
+  DialogContentText, DialogTitle, FormControl,
+  FormControlLabel, InputLabel, TextField, Select,
+  Switch, MenuItem, Divider, AppBar, Toolbar,
+  IconButton, Typography, Grid, Fab, ButtonGroup,
+  createMuiTheme,
 } from '@material-ui/core';
 
 // Allow the calendar view to be accessible whether the user is the creator of the movement or not
 import FullScreenDialog from './CalendarWindow.jsx';
 
+// Material UI picker to style the theme for the date and time custom components
+const materialTheme = createMuiTheme({
+  overrides: {
+    MuiPickersToolbar: {
+      toolbar: {
+        backgroundColor: '#718582',
+      },
+    },
+    MuiPickersCalendarHeader: {
+      switchHeader: {
+        // backgroundColor: lightBlue.A200,
+        // color: "white",
+      },
+    },
+    MuiPickersDay: {
+      day: {
+        color: lightBlue.A700,
+      },
+      daySelected: {
+        backgroundColor: lightBlue['400'],
+      },
+      dayDisabled: {
+        color: lightBlue['100'],
+      },
+      current: {
+        color: lightBlue['900'],
+      },
+    },
+    MuiPickersModal: {
+      dialogAction: {
+        color: lightBlue['400'],
+      },
+    },
+  },
+});
+
+// Material ui to style the components added from the plain material ui package
 const useStyles = makeStyles((theme) => ({
   appBar: {
     backgroundColor: '#718582',
@@ -52,7 +96,9 @@ const EventCreateDialog = ({
   const [name, setName] = useState('');
   const [location, setLocation] = useState('');
   const [selectedTime, setSelectedTime] = useState(new Date());
-  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [multiDay, setMultiDay] = useState(false);
+  const [selectedStartDate, setSelectedStartDate] = useState(new Date());
+  const [selectedEndDate, setSelectedEndDate] = useState(new Date());
   const [category, setCategory] = useState('');
   const [description, setDescription] = useState('');
   const [imageUrl, setImage] = useState('');
@@ -65,7 +111,8 @@ const EventCreateDialog = ({
   };
 
   const handleSave = () => {
-    console.log('date', selectedDate);
+    console.log('selectedStartDate', selectedStartDate);
+    console.log('selectedEndDate', selectedEndDate);
     console.log('time', selectedTime);
     console.log('name', name);
     console.log('location', location);
@@ -80,10 +127,12 @@ const EventCreateDialog = ({
     //   name,
     //   location,
     //   time: selectedTime,
-    //   date: selectedDate,
+    //   start_date: selectedStartDate,
+    //   end_date: selectedEndDate,
     //   category,
     //   description,
     //   rsvpCount: 0,
+    //   id_movement: moveId,
     //   imageUrl,
     // });
     setOpen(false);
@@ -110,12 +159,17 @@ const EventCreateDialog = ({
 
   return (
     <>
+      {/* <ButtonGroup> */}
       <FullScreenDialog />
       {isCreator && (
-        <Button variant="outlined" className="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-red-400 rounded shadow m-4" onClick={handleClickOpen}>
-          Schedule Event
-        </Button>
+        <Fab color="primary" aria-label="add" variant="round" style={{ outline: 'none' }}>
+          <AddIcon onClick={handleClickOpen} />
+        </Fab>
+        // <Button variant="outlined" className="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-red-400 rounded shadow m-4" onClick={handleClickOpen}>
+        //   Schedule Event
+        // </Button>
       )}
+      {/* </ButtonGroup> */}
 
       <Dialog
         fullWidth={fullWidth}
@@ -144,27 +198,53 @@ const EventCreateDialog = ({
           {/* Provide the time and date custom created pickers in grid block */}
           <MuiPickersUtilsProvider utils={MomentUtils}>
             <Grid container justify="space-around">
-              <KeyboardDatePicker
-                margin="normal"
-                id="date-picker-dialog"
-                format="MM/dd/yyyy"
-                value={selectedDate}
-                onChange={(date) => setSelectedDate(date)}
-                KeyboardButtonProps={{
-                  'aria-label': 'change date',
-                }}
-              />
-              <KeyboardTimePicker
-                margin="normal"
-                id="time-picker"
-                value={selectedTime}
-                onChange={(time) => setSelectedTime(time)}
-                KeyboardButtonProps={{
-                  'aria-label': 'change time',
-                }}
-              />
+              <ThemeProvider theme={materialTheme}>
+                <KeyboardDatePicker
+                  margin="normal"
+                  id="date-picker-dialog"
+                  format="MM/dd/yyyy"
+                  label="Start"
+                  value={selectedStartDate}
+                  onChange={(date) => setSelectedStartDate(date)}
+                  KeyboardButtonProps={{
+                    'aria-label': 'change date',
+                  }}
+                />
+                {multiDay && (
+                  <KeyboardDatePicker
+                    margin="normal"
+                    id="date-picker-dialog"
+                    format="MM/dd/yyyy"
+                    label="End Date"
+                    value={selectedEndDate}
+                    onChange={(date) => setSelectedEndDate(date)}
+                    KeyboardButtonProps={{
+                      'aria-label': 'change date',
+                    }}
+                  />
+                )}
+                <KeyboardTimePicker
+                  margin="normal"
+                  id="time-picker"
+                  label="Event Time"
+                  value={selectedTime}
+                  onChange={(time) => setSelectedTime(time)}
+                  keyboardIcon={<AccessTimeIcon />}
+                  KeyboardButtonProps={{
+                    'aria-label': 'change time',
+                  }}
+                />
+              </ThemeProvider>
             </Grid>
           </MuiPickersUtilsProvider>
+          <FormControlLabel
+            className={classes.formControlLabel}
+            control={<Switch checked={multiDay} onChange={() => setMultiDay(!multiDay)} />}
+            color="primary"
+            label="Multiple Day Event"
+          />
+          <Divider variant="middle" />
+
           {/* Provide the select field for the event's type /category value */}
           <form className={classes.form} noValidate>
             <FormControl className={classes.formControl}>
@@ -182,7 +262,7 @@ const EventCreateDialog = ({
                 <MenuItem value="Informational Session">INFO SESSION</MenuItem>
                 <MenuItem value="Spread Awareness">SPREAD AWARENESS</MenuItem>
                 <MenuItem value="March">MARCH</MenuItem>
-                <MenuItem value="Sit in">SIT IN</MenuItem>
+                <MenuItem value="Sit In">SIT IN</MenuItem>
                 <MenuItem value="Other">OTHER</MenuItem>
               </Select>
               <DialogContentText>
