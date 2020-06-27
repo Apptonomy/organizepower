@@ -10,13 +10,22 @@ import { makeStyles } from '@material-ui/core/styles';
 import CloseIcon from '@material-ui/icons/Close';
 import {
   Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle,
-  FormControl, FormControlLabel, InputLabel, MenuItem, Select, Switch,
+  FormControl, FormControlLabel, InputLabel, TextField, MenuItem, Select, Switch,
   Divider, AppBar, Toolbar, IconButton, Typography, Grid,
 } from '@material-ui/core';
+
+// Allow the calendar view to be accessible whether the user is the creator of the movement or not
+import FullScreenDialog from './CalendarWindow.jsx';
 
 const useStyles = makeStyles((theme) => ({
   appBar: {
     backgroundColor: '#718582',
+  },
+  root: {
+    '& > *': {
+      margin: theme.spacing(1),
+      width: '25ch',
+    },
   },
   form: {
     display: 'flex',
@@ -33,7 +42,11 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const EventCreateDialog = () => {
+const EventCreateDialog = ({
+  user,
+  moveId,
+  isCreator,
+}) => {
   const classes = useStyles();
   const [open, setOpen] = useState(false);
   const [name, setName] = useState('');
@@ -97,25 +110,12 @@ const EventCreateDialog = () => {
 
   return (
     <>
-      <Button variant="outlined" className="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-red-400 rounded shadow m-4" onClick={handleClickOpen}>
-        Schedule Event
-      </Button>
-
-      {/* <Dialog open={open} onClose={handleClose}>
-        <AppBar className={classes.appBar}>
-          <Toolbar>
-            <IconButton edge="start" color="inherit" onClick={handleClose} aria-label="close">
-              <CloseIcon />
-            </IconButton>
-            <Typography variant="h6" className={classes.title}>
-              Sound
-            </Typography>
-            <Button autoFocus color="inherit" onClick={handleClose}>
-              save
-            </Button>
-          </Toolbar>
-        </AppBar>
-      </Dialog> */}
+      <FullScreenDialog />
+      {isCreator && (
+        <Button variant="outlined" className="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-red-400 rounded shadow m-4" onClick={handleClickOpen}>
+          Schedule Event
+        </Button>
+      )}
 
       <Dialog
         fullWidth={fullWidth}
@@ -135,7 +135,11 @@ const EventCreateDialog = () => {
           </Toolbar>
         </AppBar>
 
-        <DialogTitle id="max-width-dialog-title">Optional sizes</DialogTitle>
+        <DialogTitle id="max-width-dialog-title">
+          <form className={classes.root} noValidate autoComplete="off">
+            <TextField id="standard-basic" value={name} label="Event Name" onChange={(event) => setName(event.target.value)} />
+          </form>
+        </DialogTitle>
         <DialogContent>
           {/* Provide the time and date custom created pickers in grid block */}
           <MuiPickersUtilsProvider utils={MomentUtils}>

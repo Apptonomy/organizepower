@@ -133,16 +133,7 @@ const Movement = ({
 
       <div className="m-8">
         <div>
-          {/* conditionally render event button if user is the creator of the movement */}
-          {leading && (
-            <EventCreateDialog />
-            // <div>
-            //   <button className="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-red-400 rounded shadow m-4" onClick={followMovement}>
-            //     Schedule Event
-            //   </button>
-            //   <br />
-            // </div>
-          )}
+          <EventCreateDialog isCreator={leading} user={user} moveId={id} />
 
           {/* conditionally render follow button if user is logged in */}
           {user && (
