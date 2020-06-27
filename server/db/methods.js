@@ -5,6 +5,7 @@ const {
   Movement,
   UserMovement,
   Event,
+  UserRSVP,
   Comment,
 } = require('./index');
 
@@ -248,17 +249,15 @@ const addPolitician = async(politicianObj) => {
 
 // add new event
 // one to many relationship
-const addEvent = async(eventObj, moveId) => {
+const addEvent = async(eventObj) => {
   // get the movement id
   try {
-    const movement = await Movement.findOne({ where: { id: moveId } });
     // create the event
     const event = await Event.create(eventObj);
-    // set the movement foreign key
-    event.setMove(movement);
+    // remember to add the id_movement to the eventObj on the client side before sending it
     return event;
   } catch (err) {
-    console.error(err);
+    console.error('Error adding new event to the Database:', err);
   }
 };
 
@@ -271,19 +270,20 @@ const getEvent = async(eventId) => {
     });
     return event;
   } catch (err) {
-    console.error('Error getting single event', err);
+    console.error('Error getting single event by id:', err);
   }
 };
 
 // get all events for a movement
-const getAllEvents = async() => {
+const getAllEventsForMovement = async(moveId) => {
   try {
     const events = await Event.findAll({
+      where: { movement_id: moveId },
       raw: true,
     });
     return events;
   } catch (err) {
-    console.error('Error getting all events for single movement', err);
+    console.error('Error getting all events for single movement:', err);
   }
 };
 
@@ -293,7 +293,24 @@ const addRSVPCount = async(eventId) => {
     await Event.update({ RSVPCount: sequelize.literal('rsvp_count + 1') },
       { where: { id: eventId } });
   } catch (err) {
-    console.error('Error increasing rvsp count for event', err);
+    console.error('Error increasing rvsp count for event:', err);
+  }
+};
+
+// Find all events rsvped by user
+const getMovementsRSVPByUser = async(idUser) => {
+  try {
+    const eventIds = await UserRSVP.findAll({
+      attributes: ['id_event'],
+      where: { id_user: idUser },
+      raw: true,
+    });
+    const events = await Promise.all(
+      eventIds.map(({ id_event }) => getEvent(id_event)),
+    );
+    return events.filter(event => event.id_user !== idUser);
+  } catch (err) {
+    console.error('Error retrieving the events the user RSVPed to:', err);
   }
 };
 
@@ -314,8 +331,9 @@ module.exports = {
   getAllMovements,
   getMovementsLedByUser,
   getMovementsFollowedByUser,
+  getMovementsRSVPByUser,
   getEvent,
-  getAllEvents,
+  getAllEventsForMovement,
   addEmailCount,
   addTextCount,
   addRSVPCount,
