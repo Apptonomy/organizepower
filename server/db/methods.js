@@ -287,7 +287,19 @@ const getAllEventsForMovement = async(moveId) => {
   }
 };
 
-// ADD TO EMAIL COUNT
+// ADD TO RSVP
+const addRSVP = async(userId, eventId) => {
+  try {
+    await UserRSVP.create({
+      id_user: userId,
+      id_event: eventId,
+    });
+  } catch (err) {
+    console.error('Error adding the user rsvp:', err);
+  }
+};
+
+// ADD TO RSVP COUNT
 const addRSVPCount = async(eventId) => {
   try {
     await Event.update({ RSVPCount: sequelize.literal('rsvp_count + 1') },
@@ -318,6 +330,7 @@ module.exports = {
 
   addMovement,
   addEvent,
+  addRSVP,
   addPolitician,
   addUser,
   linkUserMovement,
