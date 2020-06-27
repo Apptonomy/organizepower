@@ -125,6 +125,34 @@ const Comment = sequelize.define('comment', {
   username: { type: DataTypes.STRING, allowNull: false },
 }, { underscored: true });
 
+const Event = sequelize.define('event', {
+  // event info
+  name: { type: DataTypes.STRING, allowNull: false },
+  location: { type: DataTypes.STRING, allowNull: false },
+  category: { type: DataTypes.STRING, allowNull: false },
+  description: { type: DataTypes.TEXT, allowNull: false },
+  rsvpCount: { type: DataTypes.INTEGER },
+  imageUrl: { type: DataTypes.STRING },
+}, { underscored: true });
+
+// track which events are added to a movement
+const MovementEvent = sequelize.define('movementEvent', {
+  id: {
+    type: DataTypes.INTEGER,
+    primaryKey: true,
+    autoIncrement: true,
+  },
+}, { underscored: true });
+
+// track which events a user 'rsvps' to
+const UserRSVP = sequelize.define('userRSVP', {
+  id: {
+    type: DataTypes.INTEGER,
+    primaryKey: true,
+    autoIncrement: true,
+  },
+}, { underscored: true });
+
 // sync sequelize to create tables in db before adding associations
 // { force: true } will drop and recreate the tables,
 // can be handy for dev but also dangerous:
@@ -149,10 +177,26 @@ Movement.belongsToMany(User, { through: UserMovement, foreignKey: 'id_movement' 
 Comment.belongsTo(Movement, { foreignKey: 'id_movement' });
 Comment.belongsTo(User, { foreignKey: 'id_user' });
 
+/* ////////////////////////////////////////////////////// */
+
+// add user id foreign key to all movements.. ?? //
+// Event.belongsTo(Movement, { foreignKey: 'id_event' });
+// Movement.hasMany(Event, { foreignKey: 'id_movement' });
+
+// makes a join table between the movements and events
+// 'through' key sets the name of the table: movement_event
+Movement.belongsToMany(Event, { through: MovementEvent, foreignKey: 'id_movement' });
+Event.belongsToMany(Movement, { through: MovementEvent, foreignKey: 'id_event' });
+
+// adds event and user foreign keys on RSVPs table
+UserRSVP.belongsTo(Event, { foreignKey: 'id_event' });
+UserRSVP.belongsTo(User, { foreignKey: 'id_user' });
+
 module.exports = {
   sequelize,
   User,
   Movement,
+  Event,
   Comment,
   UserMovement,
 };
