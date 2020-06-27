@@ -251,7 +251,7 @@ const addPolitician = async(politicianObj) => {
 const getAllUserMessages = async(recipient_id, sender_id) => {
   try {
     return await Message.findAll({
-      attributes: ['message'],
+      // attributes: ['message'],
       where: {
         recipient_id,
         sender_id,
