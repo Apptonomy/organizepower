@@ -2,10 +2,12 @@
 const {
   sequelize,
   User,
+  Message,
   Movement,
   UserMovement,
   Comment,
 } = require('./index');
+const { debug } = require('webpack');
 
 /* MODEL METHODS
  * Note: organizer is term for users that create movements.
@@ -245,6 +247,30 @@ const addPolitician = async(politicianObj) => {
   }
 };
 
+// Messages queries
+const getAllUserMessages = async(recipient_id, sender_id) => {
+  try {
+    return await Message.findAll({
+      attributes: ['message'],
+      where: {
+        recipient_id,
+        sender_id,
+      },
+      raw: true,
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const sendUserMessage = async(messageObj) => {
+  try {
+    await Message.create(messageObj);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 module.exports = {
 
   addMovement,
@@ -266,4 +292,6 @@ module.exports = {
   addFollower,
   addComment,
   getComments,
+  getAllUserMessages,
+  sendUserMessage,
 };
