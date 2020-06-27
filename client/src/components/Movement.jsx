@@ -135,12 +135,13 @@ const Movement = ({
         <div>
           {/* conditionally render event button if user is the creator of the movement */}
           {leading && (
-            <div>
-              <button className="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-red-400 rounded shadow m-4" onClick={followMovement}>
-                Schedule Event
-              </button>
-              <br />
-            </div>
+            <EventCreateDialog />
+            // <div>
+            //   <button className="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-red-400 rounded shadow m-4" onClick={followMovement}>
+            //     Schedule Event
+            //   </button>
+            //   <br />
+            // </div>
           )}
 
           {/* conditionally render follow button if user is logged in */}
@@ -174,7 +175,6 @@ const Movement = ({
           </div>
         </div>
       </div>
-      <EventCreateDialog />
       <Link to="/explore" className="text-gray-500 text-sm my-2 italic">← Return to Explore Page</Link>
     </div>
   );
