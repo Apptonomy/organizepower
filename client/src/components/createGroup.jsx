@@ -5,10 +5,10 @@ import StatesSelect from './StatesSelect.jsx';
 import { createGroup } from '../services/services';
 
 /**
- * @param {boolean} setIsNewUser - sets the state of isNewUser on navbar to conditionally render
+ * @param {boolean} setIsNewGroup - sets the state of isNewUser on navbar to conditionally render
  * a welcome message on login page after a successful signup
  */
-const CreateGroup = ({ setIsNewUser }) => {
+const CreateGroup = ({ setIsNewGroup }) => {
   // states managed for form submission
   const [groupName, setGroupName] = useState('');
   const [password, setPassword] = useState('');
@@ -38,17 +38,17 @@ const CreateGroup = ({ setIsNewUser }) => {
     // post user to signup route, wait for message to return
     // invalidUser message implies user already exists
     // newUser message implies user has added to database successfully
-    createGroup(group);
-      // .then(({ data: { message } }) => {
-      //   if (message === 'invalidUser') {
-      //     setUsername(''); // clear  username and password, but leave other form elements intact
-      //     setPassword('');
-      //   } else if (message === 'newUser') {
-      //     setIsNewUser(true);
-      //   }
-      //   setAuthStatus(message);
-      // })
-      // .catch(err => console.error(err));
+    createGroup(group)
+      .then(({ data: { message } }) => {
+        if (message === 'invalidUser') {
+          setGroupName(''); // clear  username and password, but leave other form elements intact
+          setPassword('');
+        } else if (message === 'newUser') {
+          setIsNewUser(true);
+        }
+        setAuthStatus(message);
+      })
+      .catch(err => console.error(err));
     console.log(group, 'inside createGroup');
   };
 

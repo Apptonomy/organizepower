@@ -3,9 +3,9 @@
 const { Router } = require('express');
 const { addGroup, getGroupByName } = require('../db/methods');
 
-const signupRouter = Router();
+const groupRouter = Router();
 
-signupRouter.post('/', (req, res, next) => {
+groupRouter.post('/', (req, res, next) => {
   const newGroup = req.body.group;
   const { groupName } = newGroup;
 
@@ -22,5 +22,5 @@ signupRouter.post('/', (req, res, next) => {
 });
 
 module.exports = {
-  signupRouter,
+  groupRouter,
 };

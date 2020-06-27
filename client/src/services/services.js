@@ -37,7 +37,7 @@ const signup = (user) => {
 
 const createGroup = (group) => {
   console.log(group);
-  //return axios.post('/signup', { group });
+  return axios.post('/group', { group });
 };
 
 export {
