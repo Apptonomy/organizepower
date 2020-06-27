@@ -80,14 +80,12 @@ const Navbar = () => {
                 )}
               {isAuthenticated
                 && (
+
                   <NavLink to="/login" onClick={handleLogout} className="block mt-4 lg:inline-block lg:mt-0 text-gray-400 hover:text-white mr-4">
                     LOGOUT
                   </NavLink>
-                ) && (
-                  <NavLink to="/createGroup" onClick={createGroup} className="block mt-4 lg:inline-block lg:mt-0 text-gray-400 hover:text-white mr-4">
-                    CREATE GROUP
-                  </NavLink>
-              )}
+         
+                )}
             </div>
           </div>
         </nav>
