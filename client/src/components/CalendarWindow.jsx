@@ -9,7 +9,7 @@ import Calendar from './Calendar.jsx';
 
 const useStyles = makeStyles((theme) => ({
   appBar: {
-    backgroundColor: 'black',
+    backgroundColor: '#718582',
     position: 'relative',
   },
   title: {
