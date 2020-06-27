@@ -39,6 +39,7 @@ const MovementListItem = ({
     textCount,
     polFirstName,
     polLastName,
+    charName,
     id_organizer,
   } = movement;
 
@@ -80,9 +81,16 @@ const MovementListItem = ({
           <p className="text-gray-700 text-base my-2">
             {location}
           </p>
+          {polFirstName && (
           <p className="text-gray-700 text-base my-2">
             Important Politician: {polFirstName} {polLastName}
           </p>
+          )}
+          {charName && (
+            <p className="text-gray-700 text-base my-2">
+              Charity: {charName}
+            </p>
+          )}
           <p className="text-gray-500 text-sm my-2">
             <i>{startedBy} started this movement</i>
           </p>

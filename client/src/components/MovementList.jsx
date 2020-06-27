@@ -5,6 +5,7 @@ import {
   getMovementsFollowing,
 } from '../services/services';
 
+// child of explore
 const MovementList = ({
   user,
   movements = [],

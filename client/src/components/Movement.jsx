@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 import SendMessage from './SendMessage.jsx';
 import Comments from './Comments.jsx';
+import Charity from './Charity.jsx';
 import { getMovementsLeading, getMovementsFollowing } from '../services/services';
 
 const Movement = ({
@@ -23,6 +24,11 @@ const Movement = ({
     followers,
     emailCount,
     textCount,
+    charDescription,
+    charImageUrl,
+    charName,
+    charUrl,
+    charTagline,
   } = currentMovement;
 
   const data = [
@@ -131,6 +137,16 @@ const Movement = ({
       </div>
       <div className="m-8">
         <div>
+          <Charity
+            page="movement"
+            charity={{
+              charDescription,
+              charImageUrl,
+              charName,
+              charUrl,
+              charTagline,
+            }}
+          />
           {/* conditionally render follow button if user is logged in */}
           {user && (
             <div>
