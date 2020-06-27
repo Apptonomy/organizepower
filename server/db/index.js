@@ -196,8 +196,8 @@ Event.belongsTo(Movement, {
 });
 
 // adds event and user foreign keys on RSVPs table
-UserRSVP.belongsTo(Event, { foreignKey: 'id_event' });
 UserRSVP.belongsTo(User, { foreignKey: 'id_user' });
+UserRSVP.belongsTo(Event, { foreignKey: 'id_event' });
 
 module.exports = {
   sequelize,
