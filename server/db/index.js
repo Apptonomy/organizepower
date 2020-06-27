@@ -136,13 +136,13 @@ const Event = sequelize.define('event', {
 }, { underscored: true });
 
 // track which events are added to a movement
-const MovementEvent = sequelize.define('movementEvent', {
-  id: {
-    type: DataTypes.INTEGER,
-    primaryKey: true,
-    autoIncrement: true,
-  },
-}, { underscored: true });
+// const MovementEvent = sequelize.define('movementEvent', {
+//   id: {
+//     type: DataTypes.INTEGER,
+//     primaryKey: true,
+//     autoIncrement: true,
+//   },
+// }, { underscored: true });
 
 // track which events a user 'rsvps' to
 const UserRSVP = sequelize.define('userRSVP', {
@@ -179,14 +179,21 @@ Comment.belongsTo(User, { foreignKey: 'id_user' });
 
 /* ////////////////////////////////////////////////////// */
 
-// add user id foreign key to all movements.. ?? //
+// // add user id foreign key to all movements.. ?? //
 // Event.belongsTo(Movement, { foreignKey: 'id_event' });
 // Movement.hasMany(Event, { foreignKey: 'id_movement' });
 
 // makes a join table between the movements and events
 // 'through' key sets the name of the table: movement_event
-Movement.belongsToMany(Event, { through: MovementEvent, foreignKey: 'id_movement' });
-Event.belongsToMany(Movement, { through: MovementEvent, foreignKey: 'id_event' });
+// Movement.belongsToMany(Event, { through: MovementEvent, foreignKey: 'id_movement' });
+// Event.belongsToMany(Movement, { through: MovementEvent, foreignKey: 'id_event' });
+
+// An event belongs to one movement while a movement may have many events
+Movement.hasMany(Event, { as: 'event' });
+Event.belongsTo(Movement, {
+  foreignKey: 'id_movement',
+  as: 'movement',
+});
 
 // adds event and user foreign keys on RSVPs table
 UserRSVP.belongsTo(Event, { foreignKey: 'id_event' });
@@ -197,6 +204,7 @@ module.exports = {
   User,
   Movement,
   Event,
+  UserRSVP,
   Comment,
   UserMovement,
 };
