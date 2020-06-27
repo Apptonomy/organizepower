@@ -1,9 +1,5 @@
 import axios from 'axios';
 
-const getUser = () => {
-
-};
-
 const getMovements = () => {
   return axios.get('/movement');
 };
