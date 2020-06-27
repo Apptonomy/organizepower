@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 import SendMessage from './SendMessage.jsx';
 import Comments from './Comments.jsx';
-import MyCalendar from './Calendar.jsx';
+import EventCreateDialog from './CreateEvent.jsx';
 import { getMovementsLeading, getMovementsFollowing } from '../services/services';
 
 const Movement = ({
@@ -130,7 +130,7 @@ const Movement = ({
         </div>
         <Comments movement={currentMovement} user={user} />
       </div>
-      
+
       <div className="m-8">
         <div>
           {/* conditionally render event button if user is the creator of the movement */}
@@ -174,6 +174,7 @@ const Movement = ({
           </div>
         </div>
       </div>
+      <EventCreateDialog />
       <Link to="/explore" className="text-gray-500 text-sm my-2 italic">← Return to Explore Page</Link>
     </div>
   );
