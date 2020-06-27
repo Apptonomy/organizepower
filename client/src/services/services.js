@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-const getUser = () => {
-
+const getUserByUsername = (username) => {
+  return axios.get(`/profile/:${username}`);
 };
 
 const getMovements = () => {
@@ -36,6 +36,7 @@ const signup = (user) => {
 };
 
 export {
+  getUserByUsername,
   getUserProfileById,
   getMovements,
   getMovementsLeading,
