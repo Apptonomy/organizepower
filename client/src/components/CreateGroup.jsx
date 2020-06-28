@@ -26,7 +26,7 @@ const CreateGroup = ({ user }) => {
     event.preventDefault();
     // create user based on state of form
     const location = `${city}, ${state}`;
-    const admin = { user };
+    const adminId = user.id;
     const group = {
       name,
       password,
@@ -35,7 +35,7 @@ const CreateGroup = ({ user }) => {
       phoneNumber,
       imageUrl,
       bio,
-      admin,
+      adminId,
     };
     // post user to signup route, wait for message to return
     // invalidUser message implies user already exists
