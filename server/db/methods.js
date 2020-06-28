@@ -55,6 +55,7 @@ const getUserByUsername = async(username) => {
 
 const getGroupByName = async(groupName) => {
   try {
+    const gn = groupName;
     const group = await Group.findOne({ where: { groupName } });
     return group;
   } catch (err) {

@@ -10,7 +10,7 @@ import { createGroup } from '../services/services';
  */
 const CreateGroup = ({ setIsNewGroup }) => {
   // states managed for form submission
-  const [groupName, setGroupName] = useState('');
+  const [name, setName] = useState('');
   const [password, setPassword] = useState('');
   const [city, setCity] = useState('');
   const [state, setState] = useState('AL');
@@ -27,7 +27,7 @@ const CreateGroup = ({ setIsNewGroup }) => {
     // create user based on state of form
     const location = `${city}, ${state}`;
     const group = {
-      groupName,
+      name,
       password,
       location,
       email,
@@ -61,7 +61,7 @@ const CreateGroup = ({ setIsNewGroup }) => {
             <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" htmlFor="grid-username">
               Group Name
             </label>
-            <input value={groupName} onChange={(e) => setGroupName(e.target.value)} className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-username" type="text" placeholder="Username" />
+            <input value={name} onChange={(e) => setName(e.target.value)} className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-username" type="text" placeholder="Username" />
             {authStatus === 'invalidUser' && <p className="italic text-xs text-red-500">Sorry that username is already taken.</p>}
           </div>
         </div>

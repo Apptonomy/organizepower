@@ -11,7 +11,7 @@ groupRouter.post('/', (req, res, next) => {
 
   getGroupByName(groupName)
     .then(user => {
-      if (user !== null) {
+      if (user !== undefined) {
         res.send({ message: 'invalidUser' });
       } else {
         addGroup(newGroup)
