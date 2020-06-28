@@ -4,6 +4,10 @@ const getUserByUsername = (username) => {
   return axios.get(`/profile/:${username}`);
 };
 
+const getAllUsers = () => {
+  return axios.get('profile/all/users');
+};
+
 const getMovements = () => {
   return axios.get('/movement');
 };
@@ -21,6 +25,16 @@ const getUserProfileById = (id) => {
   return axios.get(`/profile/:${id}`);
 };
 
+// Gets all messages between two users
+const getAllUserMessages = (sender_id, recipient_id) => {
+  return axios.get(`messages/${recipient_id}/from/${sender_id}`);
+};
+
+// post a message to the db that references two users
+const sendUserMessage = (sender_id, recipient_id, messageObj) => {
+  return axios.post(`messages/${sender_id}/to/${recipient_id}`, messageObj);
+};
+
 // Authentication
 
 const login = (username, password) => {
@@ -36,11 +50,14 @@ const signup = (user) => {
 };
 
 export {
+  getAllUsers,
   getUserByUsername,
   getUserProfileById,
   getMovements,
   getMovementsLeading,
   getMovementsFollowing,
+  getAllUserMessages,
+  sendUserMessage,
   logout,
   login,
   signup,
