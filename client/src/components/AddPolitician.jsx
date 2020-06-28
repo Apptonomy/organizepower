@@ -1,58 +1,14 @@
-import React, { useState } from 'react';
-import axios from 'axios';
-import { getMovementsLeading, getMovementsFollowing } from '../services/services';
-
+import React from 'react';
+// component receives its setPol... functions from StartMovement; they will update its state
 const AddPolitician = ({
-  user,
-  name,
-  description,
-  city,
-  state,
-  imageUrl,
-  setStartMovementClicked,
-  setMovementsLeading,
+  setPolFirstName,
+  setPolLastName,
+  setPolPhoneNumber,
+  setPolEmail,
+  setPolOrg,
+  setPolPosition,
+  setPolImageUrl,
 }) => {
-  const [polFirstName, setPolFirstName] = useState('');
-  const [polLastName, setPolLastName] = useState('');
-  const [polPhoneNumber, setPolPhoneNumber] = useState('');
-  const [polEmail, setPolEmail] = useState('');
-  const [polOrg, setPolOrg] = useState('');
-  const [polPosition, setPolPosition] = useState('');
-  const [polImageUrl, setPolImageUrl] = useState('');
-
-  const handlePolSubmit = (event) => {
-    event.preventDefault();
-    const { id } = user;
-    const movementObj = {
-      name,
-      description,
-      location: `${city}, ${state}`,
-      imageUrl,
-      emailCount: 0,
-      textCount: 0,
-      followers: 0,
-      polFirstName,
-      polLastName,
-      polPhoneNumber,
-      polOrg,
-      polPosition,
-      polImageUrl,
-      polEmail,
-    };
-    axios.post('/movement', { movementObj, id })
-      .then((movement) => {
-        document.getElementById('start-movement').reset();
-        document.getElementById('add-politician').reset();
-        setStartMovementClicked(false);
-        getMovementsLeading(user.id)
-          .then(results => {
-            setMovementsLeading(results.data);
-          })
-          .catch(err => console.error(err));
-      })
-      .catch((err) => console.error(err));
-  };
-
   return (
     <div>
       <form id="add-politician" className="w-full max-w-lg">
@@ -108,7 +64,6 @@ const AddPolitician = ({
             <input onChange={(e) => setPolImageUrl(e.target.value)} className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-password" type="text" placeholder="Image URL" />
           </div>
         </div>
-        <button onClick={handlePolSubmit} className="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow mr-4">Add Politician and Create Movement!</button>
       </form>
     </div>
   );

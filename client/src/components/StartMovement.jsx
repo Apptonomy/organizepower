@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import AddPolitician from './AddPolitician.jsx';
+import AddCharity from './addCharity.jsx';
 import StatesSelect from './StatesSelect.jsx';
 import { getMovementsLeading, getMovementsFollowing } from '../services/services';
 // import StatesSelect from './StatesSelect.jsx';
@@ -12,9 +13,23 @@ const StartMovement = ({ user, setStartMovementClicked, setMovementsLeading }) =
   const [city, setCity] = useState('');
   const [state, setState] = useState('AL');
   const [imageUrl, setImageUrl] = useState('');
+  const [charName, setCharName] = useState('');
+  const [charUrl, setCharUrl] = useState('');
+  const [charImageUrl, setCharImageUrl] = useState('');
+  const [charDescription, setCharDescription] = useState('');
+  const [charTagline, setCharTagline] = useState('');
+  const [polFirstName, setPolFirstName] = useState('');
+  const [polLastName, setPolLastName] = useState('');
+  const [polPhoneNumber, setPolPhoneNumber] = useState('');
+  const [polEmail, setPolEmail] = useState('');
+  const [polOrg, setPolOrg] = useState('');
+  const [polPosition, setPolPosition] = useState('');
+  const [polImageUrl, setPolImageUrl] = useState('');
   const [addPolClicked, setAddPolClicked] = useState(false);
+  const [addCharClicked, setAddCharClicked] = useState(false);
 
-  const handleSubmit = (event) => {
+  // this master submit function will accept basic, politician, and charity info and create a movement
+  const saveMovement = (event) => {
     event.preventDefault();
     const { id } = user;
     const movementObj = {
@@ -24,7 +39,19 @@ const StartMovement = ({ user, setStartMovementClicked, setMovementsLeading }) =
       emailCount: 0,
       textCount: 0,
       followers: 0,
+      polFirstName,
+      polLastName,
+      polPhoneNumber,
+      polEmail,
+      polOrg,
+      polPosition,
+      polImageUrl,
       imageUrl,
+      charName,
+      charUrl,
+      charImageUrl,
+      charDescription,
+      charTagline,
     };
     axios.post('/movement', { movementObj, id })
       .then((movement) => {
@@ -87,25 +114,29 @@ const StartMovement = ({ user, setStartMovementClicked, setMovementsLeading }) =
         </div>
       </form>
       <button onClick={() => setAddPolClicked(!addPolClicked)} className="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow mr-4">Add a Politician to Your Movement</button>
+      <button onClick={() => setAddCharClicked(!addCharClicked)} className="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-6 border border-gray-400 rounded shadow mr-4">Add a Charity to Your Movement</button>
       <div className="mt-4 mb-4">
         {addPolClicked && (
-          <div className="">
-            <AddPolitician
-              user={user}
-              handleSubmit={handleSubmit}
-              name={name}
-              description={desc}
-              city={city}
-              state={state}
-              imageUrl={imageUrl}
-              setStartMovementClicked={setStartMovementClicked}
-              setMovementsLeading={setMovementsLeading}
-            />
-          </div>
+          <AddPolitician
+            setPolFirstName={setPolFirstName}
+            setPolLastName={setPolLastName}
+            setPolPhoneNumber={setPolPhoneNumber}
+            setPolEmail={setPolEmail}
+            setPolOrg={setPolOrg}
+            setPolPosition={setPolPosition}
+            setPolImageUrl={setPolImageUrl}
+          />
         )}
-        {!addPolClicked && (
-          <button onClick={handleSubmit} className="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow mr-4">Create!</button>
+        {addCharClicked && (
+          <AddCharity
+            setCharName={setCharName}
+            setCharUrl={setCharUrl}
+            setCharImageUrl={setCharImageUrl}
+            setCharDescription={setCharDescription}
+            setCharTagline={setCharTagline}
+          />
         )}
+        <button onClick={saveMovement} className="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow mr-4">Create!</button>
       </div>
     </div>
   );
