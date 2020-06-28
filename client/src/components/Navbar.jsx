@@ -14,6 +14,8 @@ import Login from './Login.jsx';
 import Movement from './Movement.jsx';
 import SignUp from './SignUp.jsx';
 import PrivateRoute from './PrivateRoute.jsx';
+import Group from './Group.jsx';
+
 import {
   // getMovementsLeading,
   // getMovementsFollowing,
@@ -80,11 +82,15 @@ const Navbar = () => {
                 )}
               {isAuthenticated
                 && (
-
                   <NavLink to="/login" onClick={handleLogout} className="block mt-4 lg:inline-block lg:mt-0 text-gray-400 hover:text-white mr-4">
                     LOGOUT
                   </NavLink>
-         
+                )}
+              {isAuthenticated
+                && (
+                  <NavLink to="/createGroup" className="block mt-4 lg:inline-block lg:mt-0 text-gray-400 hover:text-white mr-4">
+                    CREATE GROUP
+                  </NavLink>
                 )}
             </div>
           </div>
@@ -108,6 +114,15 @@ const Navbar = () => {
               <Explore
                 user={user}
                 handleMovementTitleClick={handleMovementTitleClick}
+              />
+            )}
+          />
+          <Route
+            exact
+            path="/createGroup"
+            render={() => (
+              <Group
+                user={user}
               />
             )}
           />
