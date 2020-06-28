@@ -14,7 +14,7 @@ import Login from './Login.jsx';
 import Movement from './Movement.jsx';
 import SignUp from './SignUp.jsx';
 import PrivateRoute from './PrivateRoute.jsx';
-import Group from './Group.jsx';
+import CreateGroup from './CreateGroup.jsx';
 
 import {
   // getMovementsLeading,
@@ -121,7 +121,7 @@ const Navbar = () => {
             exact
             path="/createGroup"
             render={() => (
-              <Group
+              <CreateGroup
                 user={user}
               />
             )}

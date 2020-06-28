@@ -8,12 +8,12 @@ import { createGroup } from '../services/services';
  * @param {boolean} setIsNewGroup - sets the state of isNewUser on navbar to conditionally render
  * a welcome message on login page after a successful signup
  */
-const CreateGroup = ({ setIsNewGroup }) => {
+const CreateGroup = ({ user }) => {
   // states managed for form submission
   const [name, setName] = useState('');
   const [password, setPassword] = useState('');
   const [city, setCity] = useState('');
-  const [state, setState] = useState('AL');
+  const [state, setState] = useState('');
   const [email, setEmail] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
   const [imageUrl, setImage] = useState('');
@@ -26,6 +26,7 @@ const CreateGroup = ({ setIsNewGroup }) => {
     event.preventDefault();
     // create user based on state of form
     const location = `${city}, ${state}`;
+    const admin = { user };
     const group = {
       name,
       password,
@@ -34,6 +35,7 @@ const CreateGroup = ({ setIsNewGroup }) => {
       phoneNumber,
       imageUrl,
       bio,
+      admin,
     };
     // post user to signup route, wait for message to return
     // invalidUser message implies user already exists
@@ -51,7 +53,6 @@ const CreateGroup = ({ setIsNewGroup }) => {
       .catch(err => console.error(err));
     console.log(group, 'inside createGroup');
   };
-
 
   return (
     <div className="m-8">
@@ -129,7 +130,7 @@ const CreateGroup = ({ setIsNewGroup }) => {
           </div>
         </div>
         <button className="modal-close px-4 bg-indigo-500 p-3 rounded-lg text-white hover:bg-indigo-400" onClick={() => toggleAdmin()}>Are you an admin?</button>
-      
+
         <input className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline m-2 float-right" type="submit" value="Create Group" onClick={handleCreateGroup} />
       </form>
       {/* invalidUser response will redirect to same page and conditionally render a message about
