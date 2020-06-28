@@ -1,5 +1,6 @@
 const { Router } = require('express');
 const {
+  getAllUsers,
   getUserByUsername,
   getUserById,
   getMovementsFollowedByUser,
@@ -15,6 +16,23 @@ profileRouter.get('/:username', (req, res) => {
   getUserByUsername(username)
     .then((user) => {
       res.send(user);
+    })
+    .catch(err => {
+      console.error(err);
+      res.sendStatus(500);
+    });
+});
+
+profileRouter.get('/all/users', (req, res) => {
+  console.log(req);
+  getAllUsers()
+    .then((users) => {
+      // strip the hash and salt from each user for safety
+      users.forEach((user) => {
+        user.salt = null;
+        user.hash = null;
+      });
+      res.send(users);
     })
     .catch(err => {
       console.error(err);
