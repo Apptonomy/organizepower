@@ -17,7 +17,7 @@ import {
   DialogContentText, DialogTitle, FormControl,
   FormControlLabel, InputLabel, TextField, Select,
   Switch, MenuItem, Divider, AppBar, Toolbar,
-  IconButton, Typography, Grid, Fab, ButtonGroup,
+  IconButton, Typography, Grid, Fab,
   createMuiTheme,
 } from '@material-ui/core';
 
@@ -115,6 +115,7 @@ const EventCreateDialog = ({
     console.log('selectedEndDate', selectedEndDate);
     console.log('time', selectedTime);
     console.log('name', name);
+    console.log('description', description);
     console.log('location', location);
     console.log('category', category);
     // axios.post('/event', {
@@ -133,7 +134,7 @@ const EventCreateDialog = ({
     //   description,
     //   rsvpCount: 0,
     //   id_movement: moveId,
-    //   imageUrl,
+    //   imageUrl: '',
     // });
     setOpen(false);
   };
@@ -244,32 +245,44 @@ const EventCreateDialog = ({
             label="Multiple Day Event"
           />
           <Divider variant="middle" />
+          <br />
 
           {/* Provide the select field for the event's type /category value */}
-          <form className={classes.form} noValidate>
-            <FormControl className={classes.formControl}>
-              <InputLabel htmlFor="max-width">Event Type</InputLabel>
-              <Select
-                value={category}
-                onChange={(event) => {
-                  handleCategoryChange(event.target.value);
-                }}
-                inputProps={{
-                  name: 'category',
-                  id: 'category',
-                }}
-              >
-                <MenuItem value="Informational Session">INFO SESSION</MenuItem>
-                <MenuItem value="Spread Awareness">SPREAD AWARENESS</MenuItem>
-                <MenuItem value="March">MARCH</MenuItem>
-                <MenuItem value="Sit In">SIT IN</MenuItem>
-                <MenuItem value="Other">OTHER</MenuItem>
-              </Select>
-              <DialogContentText>
-                {categoryText}
-              </DialogContentText>
-            </FormControl>
-          </form>
+          <Grid container justify="space-evenly">
+            <form className={classes.form} noValidate>
+              <FormControl className={classes.formControl}>
+                <InputLabel htmlFor="max-width">Event Type</InputLabel>
+                <Select
+                  value={category}
+                  onChange={(event) => {
+                    handleCategoryChange(event.target.value);
+                  }}
+                  inputProps={{
+                    name: 'category',
+                    id: 'category',
+                  }}
+                >
+                  <MenuItem value="Informational Session">INFO SESSION</MenuItem>
+                  <MenuItem value="Spread Awareness">SPREAD AWARENESS</MenuItem>
+                  <MenuItem value="March">MARCH</MenuItem>
+                  <MenuItem value="Sit In">SIT IN</MenuItem>
+                  <MenuItem value="Other">OTHER</MenuItem>
+                </Select>
+                <DialogContentText>
+                  {categoryText}
+                </DialogContentText>
+              </FormControl>
+            </form>
+            <TextField
+              id="outlined-multiline-static"
+              label="Event Description"
+              value={description}
+              multiline
+              rows={4}
+              variant="outlined"
+              onChange={(event) => setDescription(event.target.value)}
+            />
+          </Grid>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleSave} color="primary">
