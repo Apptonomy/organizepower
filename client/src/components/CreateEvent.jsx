@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
 
 // Imports to create custom time and date pickers using moment as the utility library
@@ -17,7 +17,7 @@ import {
   DialogContentText, DialogTitle, FormControl,
   FormControlLabel, InputLabel, TextField, Select,
   Switch, MenuItem, Divider, AppBar, Toolbar,
-  IconButton, Typography, Grid, Fab,
+  IconButton, Typography, Grid, Fab, ButtonGroup,
   createMuiTheme,
 } from '@material-ui/core';
 
@@ -98,7 +98,7 @@ const EventCreateDialog = ({
   const [selectedTime, setSelectedTime] = useState(new Date());
   const [multiDay, setMultiDay] = useState(false);
   const [selectedStartDate, setSelectedStartDate] = useState(new Date());
-  const [selectedEndDate, setSelectedEndDate] = useState(new Date());
+  const [selectedEndDate, setSelectedEndDate] = useState('');
   const [category, setCategory] = useState('');
   const [description, setDescription] = useState('');
   const [imageUrl, setImage] = useState('');
@@ -111,6 +111,8 @@ const EventCreateDialog = ({
   };
 
   const handleSave = () => {
+    // toLocaleTimeString() 11:18:48 AM
+    // toLocaleDateString() 11/16/2015
     console.log('selectedStartDate', selectedStartDate);
     console.log('selectedEndDate', selectedEndDate);
     console.log('time', selectedTime);
@@ -119,15 +121,9 @@ const EventCreateDialog = ({
     console.log('location', location);
     console.log('category', category);
     // axios.post('/event', {
-    //   // name: DataTypes.STRING,
-    //   // location: DataTypes.STRING,
-    //   // category: DataTypes.STRING,
-    //   // description: DataTypes.TEXT,
-    //   // rsvpCount: DataTypes.INTEGER,
-    //   // imageUrl: DataTypes.STRING,
     //   name,
     //   location,
-    //   time: selectedTime,
+    //   time: selectedTime.toLocaleTimeString(),
     //   start_date: selectedStartDate,
     //   end_date: selectedEndDate,
     //   category,
@@ -149,6 +145,8 @@ const EventCreateDialog = ({
       setCategoryText('Participate in a mobile protest.');
     } else if (value === 'Sit In') {
       setCategoryText('Participcate in a stationary protest.');
+    } else if (value === 'Boycott') {
+      setCategoryText('Support the cause by abstaining from using specific services.');
     } else if (value === 'Other') {
       setCategoryText('Type of Event not listed here? Give followers some extra details in the description of your event.');
     }
@@ -160,17 +158,17 @@ const EventCreateDialog = ({
 
   return (
     <>
-      {/* <ButtonGroup> */}
-      <FullScreenDialog />
-      {isCreator && (
-        <Fab color="primary" aria-label="add" variant="round" style={{ outline: 'none' }}>
-          <AddIcon onClick={handleClickOpen} />
-        </Fab>
-        // <Button variant="outlined" className="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-red-400 rounded shadow m-4" onClick={handleClickOpen}>
-        //   Schedule Event
-        // </Button>
-      )}
-      {/* </ButtonGroup> */}
+      <ButtonGroup>
+        <FullScreenDialog />
+        {isCreator && (
+          <Fab color="primary" aria-label="add" variant="extended" size="small" style={{ outline: 'none' }}>
+            <AddIcon onClick={handleClickOpen} />
+          </Fab>
+          // <Button variant="outlined" className="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-red-400 rounded shadow m-4" onClick={handleClickOpen}>
+          //   Schedule Event
+          // </Button>
+        )}
+      </ButtonGroup>
 
       <Dialog
         fullWidth={fullWidth}
@@ -262,10 +260,11 @@ const EventCreateDialog = ({
                     id: 'category',
                   }}
                 >
-                  <MenuItem value="Informational Session">INFO SESSION</MenuItem>
+                  <MenuItem value="Informational Session">INFORMATIONAL SESSION</MenuItem>
                   <MenuItem value="Spread Awareness">SPREAD AWARENESS</MenuItem>
                   <MenuItem value="March">MARCH</MenuItem>
                   <MenuItem value="Sit In">SIT IN</MenuItem>
+                  <MenuItem value="Boycott">BOYCOTT</MenuItem>
                   <MenuItem value="Other">OTHER</MenuItem>
                 </Select>
                 <DialogContentText>
