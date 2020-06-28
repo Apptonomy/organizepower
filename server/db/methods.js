@@ -1,4 +1,5 @@
 /* eslint-disable camelcase */
+const { debug } = require('webpack');
 const {
   sequelize,
   User,
@@ -7,7 +8,6 @@ const {
   UserMovement,
   Comment,
 } = require('./index');
-const { debug } = require('webpack');
 
 /* MODEL METHODS
  * Note: organizer is term for users that create movements.
@@ -42,6 +42,16 @@ const getUserByUsername = async(username) => {
     return user;
   } catch (err) {
     console.error(err);
+  }
+};
+
+// GET ALL USERS
+const getAllUsers = async() => {
+  try {
+    const users = User.findAll();
+    return users;
+  } catch (err) {
+    console.log(err);
   }
 };
 
@@ -282,6 +292,7 @@ module.exports = {
   editUser,
   editUserField,
   getUserById,
+  getAllUsers,
   getUserByUsername,
   getMovement,
   getAllMovements,
