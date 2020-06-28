@@ -129,6 +129,9 @@ const Event = sequelize.define('event', {
   // event info
   name: { type: DataTypes.STRING, allowNull: false },
   location: { type: DataTypes.STRING, allowNull: false },
+  time: { type: DataTypes.STRING, allowNull: false },
+  startDate: { type: DataTypes.STRING, allowNull: false },
+  endDate: { type: DataTypes.STRING, allowNull: true },
   category: { type: DataTypes.STRING, allowNull: false },
   description: { type: DataTypes.TEXT, allowNull: false },
   rsvpCount: { type: DataTypes.INTEGER },
