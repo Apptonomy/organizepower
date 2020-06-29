@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Calendar, momentLocalizer } from 'react-big-calendar';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import moment from 'moment';
+import EventCard from './EventCard.jsx';
 
 const localizer = momentLocalizer(moment);
 
@@ -28,16 +29,55 @@ const myEventsList = [{
   'desc': 'Pre-meeting meeting, to prepare for the meeting',
 }];
 
-const MyCalendar = () => (
-  <div>
-    <Calendar
-      localizer={localizer}
-      events={myEventsList}
-      startAccessor="start"
-      endAccessor="end"
-      style={{ height: 550, width: 900 }}
-    />
-  </div>
-);
+const MyCalendar = ({
+  user,
+  events,
+}) => {
+  const [eventsList, setEventsList] = useState(myEventsList);
+
+  useEffect(() => {
+    const eventsColl = [];
+    console.log('regular date:', new Date());
+    events.forEach((eventObj) => {
+      const {
+        name, startDate, endDate, category, description, time, location, rsvpCount, id,
+      } = eventObj;
+      console.log('eventId', id);
+      console.log('userId', user.id);
+
+      eventsColl.push({
+        "title": name,
+        "start": startDate,
+        "end": endDate,
+        "desc": description,
+        "other": {
+          category,
+          time,
+          location,
+          rsvpCount,
+          eventId: id,
+          userId: user.id,
+        },
+      });
+    });
+    setEventsList(eventsColl);
+  }, []);
+
+  return (
+    <div>
+      <Calendar
+        localizer={localizer}
+        events={eventsList}
+        views={['month', 'agenda']}
+        startAccessor="start"
+        endAccessor="end"
+        style={{ height: 550, width: 900 }}
+        components={{
+          event: EventCard,
+        }}
+      />
+    </div>
+  );
+};
 
 export default MyCalendar;
