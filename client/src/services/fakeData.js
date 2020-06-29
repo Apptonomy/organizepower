@@ -99,34 +99,7 @@ const fakeUsers = [
   },
 ];
 
-const fakeMessages = [
-  {
-    id: 1,
-    message: "What's up gamer",
-    sender_id: 3,
-    recipient_id: 2,
-  },
-  {
-    id: 2,
-    message: "Nothing much",
-    sender_id: 2,
-    recipient_id: 3,
-  },
-  {
-    id: 3,
-    message: "What's up gamer",
-    sender_id: 1,
-    recipient_id: 4,
-  },
-  {
-    id: 4,
-    message: "What's up gamer",
-    sender_id: 4,
-    recipient_id: 1,
-  },
-];
 export {
   fakeMovements,
   fakeUsers,
-  fakeMessages,
 };

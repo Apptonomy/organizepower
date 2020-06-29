@@ -81,17 +81,16 @@ const User = sequelize.define('user', {
   firstName: { type: DataTypes.STRING, allowNull: true },
   lastName: { type: DataTypes.STRING, allowNull: true },
   location: { type: DataTypes.STRING, allowNull: true },
-  email: { type: DataTypes.STRING, allowNull: false },
+  email: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
   phoneNumber: { type: DataTypes.STRING },
   imageUrl: { type: DataTypes.STRING },
   bio: { type: DataTypes.TEXT },
   lastLogin: { type: DataTypes.DATE },
   status: { type: Sequelize.ENUM('active', 'inactive'), defaultValue: 'active' },
 }, { underscored: true }); // convert camelCase column names to snake_case in db
-
-const Message = sequelize.define('message', {
-  message: { type: DataTypes.STRING.BINARY, allowNull: true },
-}, { underscored: true });
 
 const Group = sequelize.define('group', {
   name: { type: DataTypes.STRING, allowNull: false, unique: true },
@@ -176,11 +175,8 @@ const UserRsvp = sequelize.define('userRsvp', {
 // { force: true } will drop and recreate the tables,
 // can be handy for dev but also dangerous:
 
-// sequelize.sync({ force: true }); // will drop tables every time
-// sequelize.sync(); // will not drop tables every time
-
 // sequelize.sync({ force: true });
-sequelize.sync();
+ sequelize.sync(); // will not drop tables every time
 
 // ASSOCIATIONS: these need to be set after all the models have been
 // made and synced with the database. Cannot make an association if
@@ -189,12 +185,6 @@ sequelize.sync();
 // add user id foreign key to all movements
 Movement.belongsTo(User, { foreignKey: 'id_organizer' });
 User.hasMany(Movement, { foreignKey: 'id_organizer' });
-
-Message.belongsTo(User, { foreignKey: 'sender_id' });
-User.hasMany(Message, { foreignKey: 'sender_id' });
-
-Message.belongsTo(User, { foreignKey: 'recipient_id' });
-User.hasMany(Message, { foreignKey: 'recipient_id' });
 
 // makes a join table between the users and movements
 // 'through' key sets the name of the table: user_movements
@@ -222,7 +212,6 @@ Event.belongsToMany(User, { through: UserRsvp });
 module.exports = {
   sequelize,
   User,
-  Message,
   Group,
   Movement,
   Event,
