@@ -1,13 +1,18 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import CloseIcon from '@material-ui/icons/Close';
 import {
-  Button, Dialog, List, ListItem, ListItemText, Divider, AppBar, Toolbar,
-  IconButton, Typography, Slide,
+  Button, Dialog, Divider, AppBar, Toolbar, IconButton,
+  Typography, Slide, Grid,
 } from '@material-ui/core';
 import Calendar from './Calendar.jsx';
 
 const useStyles = makeStyles((theme) => ({
+  root: {
+    width: '100%',
+    maxWidth: 360,
+    backgroundColor: theme.palette.background.paper,
+  },
   appBar: {
     backgroundColor: '#718582',
     position: 'relative',
@@ -22,9 +27,12 @@ const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-const FullScreenDialog = () => {
+const FullScreenDialog = ({
+  user,
+  events,
+}) => {
   const classes = useStyles();
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -46,14 +54,14 @@ const FullScreenDialog = () => {
               <CloseIcon />
             </IconButton>
             <Typography variant="h6" className={classes.title}>
-              Sound
+              Movement Events
             </Typography>
-            <Button autoFocus color="inherit" onClick={handleClose}>
-              save
-            </Button>
           </Toolbar>
         </AppBar>
-        <Calendar />
+        <Grid container justify="space-evenly">
+          {/* Calendar Component */}
+          <Calendar events={events} user={user} />
+        </Grid>
       </Dialog>
     </div>
   );
