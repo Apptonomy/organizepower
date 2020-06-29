@@ -4,6 +4,7 @@ import moment from 'moment';
 import { Link } from 'react-router-dom';
 import MovementList from './MovementList.jsx';
 import StartMovement from './StartMovement.jsx';
+import StartMovementAsGroup from './StartMovementAsGroup.jsx';
 import { getMovementsLeading, getMovementsFollowing } from '../services/services';
 import FullScreenDialog from './CalendarWindow.jsx';
 
@@ -20,6 +21,7 @@ const Profile = ({ user, handleMovementTitleClick }) => {
   } = user;
 
   const [startMovementClicked, setStartMovementClicked] = useState(false);
+  const [startMovementAsGroupClicked, setStartMovementAsGroupClicked] = useState(false);
   const [movementsLeading, setMovementsLeading] = useState([]);
   const [movementsFollowing, setMovementsFollowing] = useState([]);
   const [events, setEvents] = useState([]);
@@ -63,6 +65,7 @@ const Profile = ({ user, handleMovementTitleClick }) => {
 
         <div className="m-4">
           <button onClick={() => setStartMovementClicked(!startMovementClicked)} className="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 mb-8 border border-gray-400 rounded shadow mr-4">Start a Movement</button>
+          <button onClick={() => setStartMovementAsGroupClicked(!startMovementAsGroupClicked)} className="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 mb-8 border border-gray-400 rounded shadow mr-4">Start a Movement as Group</button>
           <Link to="/explore"><button className="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 mb-8 border border-gray-400 rounded shadow mr-4">Join a Movement</button></Link>
           <FullScreenDialog events={events} />
           {startMovementClicked && (
@@ -73,6 +76,15 @@ const Profile = ({ user, handleMovementTitleClick }) => {
                 setStartMovementClicked={setStartMovementClicked}
               />
             </div>
+          )}
+          {startMovementAsGroupClicked && (
+          <div className="">
+            <StartMovementAsGroup
+              user={user}
+              setMovementsLeading={setMovementsLeading}
+              setStartMovementClicked={setStartMovementClicked}
+            />
+          </div>
           )}
         </div>
       </div>
@@ -87,6 +99,14 @@ const Profile = ({ user, handleMovementTitleClick }) => {
         </div>
         <div className="float-left max-w-lg rounded overflow-hidden shadow-lg p-8 m-8">
           <p className="text-gray-900 font-bold text-xl mb-2">Member of These Movements:</p>
+          <MovementList
+            user={user}
+            movements={movementsFollowing}
+            handleMovementTitleClick={handleMovementTitleClick}
+          />
+        </div>
+        <div className="float-left max-w-lg rounded overflow-hidden shadow-lg p-8 m-8">
+          <p className="text-gray-900 font-bold text-xl mb-2">Leader of these Groups</p>
           <MovementList
             user={user}
             movements={movementsFollowing}

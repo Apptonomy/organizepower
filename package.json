@@ -30,6 +30,7 @@
     "connect-session-sequelize": "^6.1.1",
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
+    "emoji-mart": "^3.0.0",
     "express": "^4.17.1",
     "express-session": "^1.17.1",
     "googleapis": "^52.1.0",
@@ -41,6 +42,7 @@
     "react": "^16.13.1",
     "react-big-calendar": "^0.25.0",
     "react-dom": "^16.13.1",
+    "react-draggable": "^4.4.3",
     "react-router-dom": "^5.2.0",
     "sequelize": "^5.21.12",
     "twilio": "^3.45.0"

@@ -7,7 +7,7 @@ import StatesSelect from './StatesSelect.jsx';
 import { getMovementsLeading, getMovementsFollowing, getGroups } from '../services/services';
 // import StatesSelect from './StatesSelect.jsx';
 
-const StartMovement = ({ user, setStartMovementClicked, setMovementsLeading }) => {
+const StartMovementAsGroup = ({ user, setStartMovementClicked, setMovementsLeading }) => {
   const [name, setName] = useState('');
   const [groups, setGroups] = useState('');
   const [desc, setDesc] = useState('');
@@ -54,7 +54,7 @@ const StartMovement = ({ user, setStartMovementClicked, setMovementsLeading }) =
       charDescription,
       charTagline,
     };
-    axios.post('/movement', { movementObj, id })
+    axios.post('/movement/group', movementObj)
       .then((movement) => {
         document.getElementById('start-movement').reset();
         setStartMovementClicked(false);
@@ -150,4 +150,4 @@ const StartMovement = ({ user, setStartMovementClicked, setMovementsLeading }) =
     </div>
   );
 };
-export default StartMovement;
+export default StartMovementAsGroup;

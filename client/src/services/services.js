@@ -31,6 +31,15 @@ const signup = (user) => {
   return axios.post('/signup', { user });
 };
 
+const createGroup = (group) => {
+  console.log(group);
+  return axios.post('/group', { group });
+};
+
+const getGroups = () => {
+  return axios.get('/group');
+};
+
 export {
   getUserProfileById,
   getMovements,
@@ -39,4 +48,6 @@ export {
   logout,
   login,
   signup,
+  createGroup,
+  getGroups,
 };

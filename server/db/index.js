@@ -92,6 +92,22 @@ const User = sequelize.define('user', {
   status: { type: Sequelize.ENUM('active', 'inactive'), defaultValue: 'active' },
 }, { underscored: true }); // convert camelCase column names to snake_case in db
 
+const Group = sequelize.define('group', {
+  name: { type: DataTypes.STRING, allowNull: false, unique: true },
+  adminId: { type: DataTypes.STRING, allowNull: false, unique: false },
+  adminName: { type: DataTypes.STRING, allowNull: false, unique: false },
+  location: { type: DataTypes.STRING, allowNull: true },
+  email: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  phoneNumber: { type: DataTypes.STRING },
+  imageUrl: { type: DataTypes.STRING },
+  bio: { type: DataTypes.TEXT },
+  lastLogin: { type: DataTypes.DATE },
+  status: { type: Sequelize.ENUM('active', 'inactive'), defaultValue: 'active' },
+}, { underscored: true }); // convert camelCase column names to snake_case in db
+
 const Movement = sequelize.define('movement', {
   // movement info
   name: { type: DataTypes.STRING, allowNull: false },
@@ -108,6 +124,12 @@ const Movement = sequelize.define('movement', {
   polEmail: { type: DataTypes.STRING },
   polPhoneNumber: { type: DataTypes.STRING },
   polImageUrl: { type: DataTypes.STRING },
+  // Charity info
+  charName: { type: DataTypes.STRING },
+  charUrl: { type: DataTypes.STRING },
+  charImageUrl: { type: DataTypes.STRING },
+  charDescription: { type: DataTypes.TEXT },
+  charTagline: { type: DataTypes.STRING(100) },
 }, { underscored: true });
 
 // track which movements a user 'joins'
@@ -123,6 +145,8 @@ const UserMovement = sequelize.define('userMovement', {
 const Comment = sequelize.define('comment', {
   commentText: { type: DataTypes.STRING, allowNull: false },
   username: { type: DataTypes.STRING, allowNull: false },
+  emojiData: { type: DataTypes.STRING(1234), defaultValue: '[]' },
+  replyData: { type: DataTypes.STRING(1234), defaultValue: '[]' },
 }, { underscored: true });
 
 const Event = sequelize.define('event', {
@@ -152,7 +176,7 @@ const UserRsvp = sequelize.define('userRsvp', {
 // can be handy for dev but also dangerous:
 
 // sequelize.sync({ force: true });
-sequelize.sync(); // will not drop tables every time
+ sequelize.sync(); // will not drop tables every time
 
 // ASSOCIATIONS: these need to be set after all the models have been
 // made and synced with the database. Cannot make an association if
@@ -188,6 +212,7 @@ Event.belongsToMany(User, { through: UserRsvp });
 module.exports = {
   sequelize,
   User,
+  Group,
   Movement,
   Event,
   UserRsvp,

@@ -7,6 +7,7 @@ const {
   addEmailCount,
   addTextCount,
   addFollower,
+  editMovement,
 } = require('../db/methods');
 
 const movementRouter = Router();
@@ -64,6 +65,18 @@ movementRouter.post('/', (req, res) => {
     });
 });
 
+movementRouter.post('/group', (req, res) => {
+  const { movementObj, id } = req.body;
+  // add a movement to db
+  addMovement(movementObj, id)
+    .then(movement => {
+      res.send(movement);
+    })
+    .catch(err => {
+      console.error(err);
+    });
+});
+
 movementRouter.post('/emailCount/', (req, res) => {
   const { id } = req.body;
   const movementId = parseFloat(id);
@@ -86,6 +99,18 @@ movementRouter.post('/textCount/', (req, res) => {
       res.sendStatus(200);
     })
     .catch(err => {
+      console.error(err);
+    });
+});
+
+// route to update a movement
+movementRouter.put('/', (req, res) => {
+  const { movementObj } = req.body;
+  editMovement(movementObj)
+    .then((response) => {
+      res.sendStatus(201);
+    })
+    .catch((err) => {
       console.error(err);
     });
 });
