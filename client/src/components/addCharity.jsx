@@ -130,7 +130,6 @@ const AddCharity = ({
           {charities && (
             <div className="flex flex-wrap">
               {charities.map((charity, index) => (
-                <div key={index}>
                 <Charity
                   page="addCharity"
                   key={charity.charName}
@@ -142,7 +141,6 @@ const AddCharity = ({
                   setCharDescription={setCharDescription}
                   setCharTagline={setCharTagline}
                 />
-                </div>
               ))}
             </div>
           )}
