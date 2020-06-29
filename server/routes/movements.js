@@ -7,6 +7,7 @@ const {
   addEmailCount,
   addTextCount,
   addFollower,
+  editMovement,
 } = require('../db/methods');
 
 const movementRouter = Router();
@@ -86,6 +87,18 @@ movementRouter.post('/textCount/', (req, res) => {
       res.sendStatus(200);
     })
     .catch(err => {
+      console.error(err);
+    });
+});
+
+// route to update a movement
+movementRouter.put('/', (req, res) => {
+  const { movementObj } = req.body;
+  editMovement(movementObj)
+    .then((response) => {
+      res.sendStatus(201);
+    })
+    .catch((err) => {
       console.error(err);
     });
 });

@@ -22,7 +22,7 @@ const StartMovement = ({ user, setStartMovementClicked, setMovementsLeading }) =
   const [polLastName, setPolLastName] = useState('');
   const [polPhoneNumber, setPolPhoneNumber] = useState('');
   const [polEmail, setPolEmail] = useState('');
-  const [polOrg, setPolOrg] = useState('');
+  // const [polOrg, setPolOrg] = useState('');
   const [polPosition, setPolPosition] = useState('');
   const [polImageUrl, setPolImageUrl] = useState('');
   const [addPolClicked, setAddPolClicked] = useState(false);
@@ -43,7 +43,7 @@ const StartMovement = ({ user, setStartMovementClicked, setMovementsLeading }) =
       polLastName,
       polPhoneNumber,
       polEmail,
-      polOrg,
+      // polOrg,
       polPosition,
       polImageUrl,
       imageUrl,
@@ -122,7 +122,7 @@ const StartMovement = ({ user, setStartMovementClicked, setMovementsLeading }) =
             setPolLastName={setPolLastName}
             setPolPhoneNumber={setPolPhoneNumber}
             setPolEmail={setPolEmail}
-            setPolOrg={setPolOrg}
+            // setPolOrg={setPolOrg}
             setPolPosition={setPolPosition}
             setPolImageUrl={setPolImageUrl}
           />

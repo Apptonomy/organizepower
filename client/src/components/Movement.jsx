@@ -5,6 +5,7 @@ import SendMessage from './SendMessage.jsx';
 import Comments from './Comments.jsx';
 import Charity from './Charity.jsx';
 import { getMovementsLeading, getMovementsFollowing } from '../services/services';
+import EditMovement from './EditMovement.jsx';
 
 const Movement = ({
   user,
@@ -40,6 +41,7 @@ const Movement = ({
   const [text, setText] = useState(false);
   const [emailClick, setEmailClick] = useState(false);
   const [leading, setLeading] = useState(false);
+  const [edit, setEdit] = useState(false);
   const followersString = followers ? followers.toLocaleString() : 0;
   const emailCountString = emailCount ? emailCount.toLocaleString() : 0;
   const textCountString = textCount ? textCount.toLocaleString() : 0;
@@ -126,27 +128,44 @@ const Movement = ({
           <p className="text-gray-900 font-bold text-3xl mb-2">{name}</p>
           <p className="text-gray-700 text-xl my-2">{location}</p>
           <p className="text-gray-700 text-lg my-2">Important Politician: {polFirstName} {polLastName}, {polPosition}</p>
-          {leading && (
-            <p className="text-gray-500 text-sm my-2">
-              <i>You created this movement.</i>
-            </p>
-          )}
           <p className="text-gray-900 text-base my-2">{description}</p>
+          {leading && (
+            <div>
+              <div className=" flex items-center">
+                <p className="text-gray-500 text-sm my-2">
+                  <i>You created this movement.</i>
+                </p>
+                <button onClick={() => setEdit(!edit)} className="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-blue-400 rounded shadow m-4">
+                  Edit this Movement
+                </button>
+              </div>
+              <div>
+                {edit && (
+                  <EditMovement
+                    setEdit={setEdit}
+                    currentMovement={currentMovement}
+                  />
+                )}
+              </div>
+            </div>
+          )}
         </div>
         <Comments movement={currentMovement} user={user} />
       </div>
       <div className="m-8">
         <div>
-          <Charity
-            page="movement"
-            charity={{
-              charDescription,
-              charImageUrl,
-              charName,
-              charUrl,
-              charTagline,
-            }}
-          />
+          {charDescription && charName && (
+            <Charity
+              page="movement"
+              charity={{
+                charDescription,
+                charImageUrl,
+                charName,
+                charUrl,
+                charTagline,
+              }}
+            />
+          )}
           {/* conditionally render follow button if user is logged in */}
           {user && (
             <div>
