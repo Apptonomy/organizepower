@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable camelcase */
 const { Router } = require('express');
-const { addGroup, getGroupByName } = require('../db/methods');
+const { addGroup, getGroupByName, getAllGroups } = require('../db/methods');
 
 const groupRouter = Router();
 
@@ -18,6 +18,12 @@ groupRouter.post('/', (req, res, next) => {
           .then(() => res.send({ message: 'newGroup' }));
       }
     })
+    .catch(err => console.error(err));
+});
+
+groupRouter.get('/', (req, res, next) => {
+  getAllGroups()
+    .then(groups => res.send(groups))
     .catch(err => console.error(err));
 });
 

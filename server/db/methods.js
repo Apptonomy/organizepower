@@ -43,6 +43,17 @@ const addGroup = async(groupObj) => {
   }
 };
 
+const getAllGroups = async() => {
+  try {
+    const groups = await Group.findAll({
+      raw: true,
+    });
+    return groups;
+  } catch (err) {
+    console.error(err);
+  }
+};
+
 // GET USER BY USERNAME
 const getUserByUsername = async(username) => {
   try {
@@ -288,4 +299,5 @@ module.exports = {
   addFollower,
   addComment,
   getComments,
+  getAllGroups,
 };

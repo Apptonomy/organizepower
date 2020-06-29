@@ -27,6 +27,7 @@ const Navbar = () => {
   const [currentMovement, setCurrentMovement] = useState({});
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isNewUser, setIsNewUser] = useState(false);
+  const [currentGroup, setCurrentGroup] = useState({});
 
   // prevents issues with user id when no user is logged in
   const userId = user ? user.id : null;
@@ -35,6 +36,16 @@ const Navbar = () => {
     axios.get(`/movement/:${movementId}`)
       .then(res => {
         setCurrentMovement(res.data);
+      })
+      .catch(err => {
+        console.error(err);
+      });
+  }
+
+  function handleGroupTitleClick(groupId) {
+    axios.get(`/movement/:${groupId}`)
+      .then(res => {
+        setCurrentGroup(res.data);
       })
       .catch(err => {
         console.error(err);
@@ -114,6 +125,7 @@ const Navbar = () => {
               <Explore
                 user={user}
                 handleMovementTitleClick={handleMovementTitleClick}
+                handleGroupTitleClick={handleGroupTitleClick}
               />
             )}
           />

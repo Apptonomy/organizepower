@@ -80,6 +80,14 @@ const Profile = ({ user, handleMovementTitleClick }) => {
             handleMovementTitleClick={handleMovementTitleClick}
           />
         </div>
+        <div className="float-left max-w-lg rounded overflow-hidden shadow-lg p-8 m-8">
+          <p className="text-gray-900 font-bold text-xl mb-2">Leader of these Groups</p>
+          <MovementList
+            user={user}
+            movements={movementsFollowing}
+            handleMovementTitleClick={handleMovementTitleClick}
+          />
+        </div>
       </div>
     </div>
   );
