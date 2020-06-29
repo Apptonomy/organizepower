@@ -65,6 +65,18 @@ movementRouter.post('/', (req, res) => {
     });
 });
 
+movementRouter.post('/group', (req, res) => {
+  const { movementObj, id } = req.body;
+  // add a movement to db
+  addMovement(movementObj, id)
+    .then(movement => {
+      res.send(movement);
+    })
+    .catch(err => {
+      console.error(err);
+    });
+});
+
 movementRouter.post('/emailCount/', (req, res) => {
   const { id } = req.body;
   const movementId = parseFloat(id);

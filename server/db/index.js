@@ -92,6 +92,22 @@ const User = sequelize.define('user', {
   status: { type: Sequelize.ENUM('active', 'inactive'), defaultValue: 'active' },
 }, { underscored: true }); // convert camelCase column names to snake_case in db
 
+const Group = sequelize.define('group', {
+  name: { type: DataTypes.STRING, allowNull: false, unique: true },
+  adminId: { type: DataTypes.STRING, allowNull: false, unique: false },
+  adminName: { type: DataTypes.STRING, allowNull: false, unique: false },
+  location: { type: DataTypes.STRING, allowNull: true },
+  email: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  phoneNumber: { type: DataTypes.STRING },
+  imageUrl: { type: DataTypes.STRING },
+  bio: { type: DataTypes.TEXT },
+  lastLogin: { type: DataTypes.DATE },
+  status: { type: Sequelize.ENUM('active', 'inactive'), defaultValue: 'active' },
+}, { underscored: true }); // convert camelCase column names to snake_case in db
+
 const Movement = sequelize.define('movement', {
   // movement info
   name: { type: DataTypes.STRING, allowNull: false },
@@ -138,7 +154,7 @@ const Comment = sequelize.define('comment', {
 // can be handy for dev but also dangerous:
 
 // sequelize.sync({ force: true });
-sequelize.sync(); // will not drop tables every time
+ sequelize.sync(); // will not drop tables every time
 
 // ASSOCIATIONS: these need to be set after all the models have been
 // made and synced with the database. Cannot make an association if
@@ -160,6 +176,7 @@ Comment.belongsTo(User, { foreignKey: 'id_user' });
 module.exports = {
   sequelize,
   User,
+  Group,
   Movement,
   Comment,
   UserMovement,

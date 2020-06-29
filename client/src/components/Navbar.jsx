@@ -14,6 +14,10 @@ import Login from './Login.jsx';
 import Movement from './Movement.jsx';
 import SignUp from './SignUp.jsx';
 import PrivateRoute from './PrivateRoute.jsx';
+import CreateGroup from './CreateGroup.jsx';
+import Group from './Group.jsx';
+
+
 import {
   // getMovementsLeading,
   // getMovementsFollowing,
@@ -25,6 +29,7 @@ const Navbar = () => {
   const [currentMovement, setCurrentMovement] = useState({});
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isNewUser, setIsNewUser] = useState(false);
+  const [currentGroup, setCurrentGroup] = useState({});
 
   // prevents issues with user id when no user is logged in
   const userId = user ? user.id : null;
@@ -33,6 +38,18 @@ const Navbar = () => {
     axios.get(`/movement/:${movementId}`)
       .then(res => {
         setCurrentMovement(res.data);
+      })
+      .catch(err => {
+        console.error(err);
+      });
+  }
+
+  function handleGroupTitleClick(groupId) {
+    console.log(groupId);
+    axios.get(`/group/:${groupId}`)
+      .then(res => {
+        console.log(res, 'handleGroup');
+        setCurrentGroup(res.data);
       })
       .catch(err => {
         console.error(err);
@@ -82,6 +99,12 @@ const Navbar = () => {
                     LOGOUT
                   </NavLink>
                 )}
+              {isAuthenticated
+                && (
+                  <NavLink to="/createGroup" className="block mt-4 lg:inline-block lg:mt-0 text-gray-400 hover:text-white mr-4">
+                    CREATE GROUP
+                  </NavLink>
+                )}
             </div>
           </div>
         </nav>
@@ -99,11 +122,33 @@ const Navbar = () => {
           />
           <Route
             exact
+            path={`/group/${currentGroup.id}`}
+            render={() => (
+              <div> hello </div>
+              // <Group
+              //   user={user}
+              //   currentGroup={currentGroup}
+              //   setCurrentGroup={setCurrentGroup}
+              // />
+            )}
+          />
+          <Route
+            exact
             path="/explore"
             render={() => (
               <Explore
                 user={user}
                 handleMovementTitleClick={handleMovementTitleClick}
+                handleGroupTitleClick={handleGroupTitleClick}
+              />
+            )}
+          />
+          <Route
+            exact
+            path="/createGroup"
+            render={() => (
+              <CreateGroup
+                user={user}
               />
             )}
           />
