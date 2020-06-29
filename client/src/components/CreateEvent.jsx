@@ -10,6 +10,7 @@ import MomentUtils from '@date-io/moment';
 
 // Imports to create dialogs using material-ui and provide page transition functionality
 import { makeStyles } from '@material-ui/core/styles';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import CloseIcon from '@material-ui/icons/Close';
 import AddIcon from '@material-ui/icons/Add';
 import {
@@ -18,11 +19,13 @@ import {
   FormControlLabel, InputLabel, TextField, Select,
   Switch, MenuItem, Divider, AppBar, Toolbar,
   IconButton, Typography, Grid, Fab, ButtonGroup,
-  createMuiTheme,
+  createMuiTheme, ExpansionPanel, ExpansionPanelSummary,
+  ExpansionPanelDetails,
 } from '@material-ui/core';
 
 // Allow the calendar view to be accessible whether the user is the creator of the movement or not
 import FullScreenDialog from './CalendarWindow.jsx';
+import StatesSelect from './StatesSelect.jsx';
 
 // Material UI picker to style the theme for the date and time custom components
 const materialTheme = createMuiTheme({
@@ -62,6 +65,11 @@ const materialTheme = createMuiTheme({
 
 // Material ui to style the components added from the plain material ui package
 const useStyles = makeStyles((theme) => ({
+  dialog: {
+    minHeight: '80vh',
+    maxHeight: '80vh',
+    marginTop: '90px',
+  },
   appBar: {
     backgroundColor: '#718582',
   },
@@ -84,21 +92,32 @@ const useStyles = makeStyles((theme) => ({
   formControlLabel: {
     marginTop: theme.spacing(1),
   },
+  heading: {
+    fontSize: theme.typography.pxToRem(15),
+    fontWeight: theme.typography.fontWeightRegular,
+  },
+  accordion: {
+    marginTop: '20px',
+  },
 }));
 
 const EventCreateDialog = ({
   user,
   moveId,
+  events,
   isCreator,
 }) => {
   const classes = useStyles();
   const [open, setOpen] = useState(false);
   const [name, setName] = useState('');
-  const [location, setLocation] = useState('');
+  const [address, setAddress] = useState('');
+  const [city, setCity] = useState('');
+  const [state, setState] = useState('');
+  const [addLocation, setAddLocation] = useState(false);
   const [selectedTime, setSelectedTime] = useState(new Date());
   const [multiDay, setMultiDay] = useState(false);
   const [selectedStartDate, setSelectedStartDate] = useState(new Date());
-  const [selectedEndDate, setSelectedEndDate] = useState('');
+  const [selectedEndDate, setSelectedEndDate] = useState(new Date());
   const [category, setCategory] = useState('');
   const [description, setDescription] = useState('');
   const [imageUrl, setImage] = useState('');
@@ -111,27 +130,24 @@ const EventCreateDialog = ({
   };
 
   const handleSave = () => {
-    // toLocaleTimeString() 11:18:48 AM
-    // toLocaleDateString() 11/16/2015
-    console.log('selectedStartDate', selectedStartDate);
-    console.log('selectedEndDate', selectedEndDate);
-    console.log('time', selectedTime);
-    console.log('name', name);
-    console.log('description', description);
-    console.log('location', location);
-    console.log('category', category);
-    // axios.post('/event', {
-    //   name,
-    //   location,
-    //   time: selectedTime.toLocaleTimeString(),
-    //   start_date: selectedStartDate,
-    //   end_date: selectedEndDate,
-    //   category,
-    //   description,
-    //   rsvpCount: 0,
-    //   id_movement: moveId,
-    //   imageUrl: '',
-    // });
+    axios.post('/event', {
+      name,
+      location: `${address}, ${city}, ${state}`,
+      time: `${selectedTime}`,
+      startDate: `${selectedStartDate}`,
+      endDate: `${selectedEndDate}`,
+      category,
+      description,
+      rsvpCount: 1,
+      id_movement: moveId,
+      image_url: '',
+    })
+      .then(() => {
+        axios.get(`/movement/${moveId}`);
+      })
+      .catch((err) => {
+        console.error('error adding event:', err);
+      });
     setOpen(false);
   };
 
@@ -159,7 +175,7 @@ const EventCreateDialog = ({
   return (
     <>
       <ButtonGroup>
-        <FullScreenDialog />
+        <FullScreenDialog events={events} user={user} />
         {isCreator && (
           <Fab color="primary" aria-label="add" variant="extended" size="small" style={{ outline: 'none' }}>
             <AddIcon onClick={handleClickOpen} />
@@ -172,7 +188,9 @@ const EventCreateDialog = ({
 
       <Dialog
         fullWidth={fullWidth}
+        className={classes.dialog}
         maxWidth="md"
+        scroll="paper"
         open={open}
         onClose={handleClose}
         aria-labelledby="max-width-dialog-title"
@@ -281,6 +299,62 @@ const EventCreateDialog = ({
               variant="outlined"
               onChange={(event) => setDescription(event.target.value)}
             />
+          </Grid>
+          <br />
+          <Divider variant="middle" />
+
+          <Grid container justify="space-evenly">
+            <FormControlLabel
+              className={classes.formControlLabel}
+              control={<Switch checked={addLocation} onChange={() => setAddLocation(!addLocation)} />}
+              color="primary"
+              label="Add Event Location"
+            />
+
+            {addLocation && (
+              <div className={classes.accordion}>
+                <ExpansionPanel>
+                  <ExpansionPanelSummary
+                    expandIcon={<ExpandMoreIcon />}
+                    aria-controls="panel1a-content"
+                    id="panel1a-header"
+                  >
+                    <Typography className={classes.heading}>Street Address</Typography>
+                  </ExpansionPanelSummary>
+                  <ExpansionPanelDetails>
+                    <form className={classes.root} noValidate autoComplete="off">
+                      <TextField id="standard-basic" value={address} label="Event Address" onChange={(event) => setAddress(event.target.value)} />
+                    </form>
+                  </ExpansionPanelDetails>
+                </ExpansionPanel>
+                <ExpansionPanel>
+                  <ExpansionPanelSummary
+                    expandIcon={<ExpandMoreIcon />}
+                    aria-controls="panel2a-content"
+                    id="panel2a-header"
+                  >
+                    <Typography className={classes.heading}>City</Typography>
+                  </ExpansionPanelSummary>
+                  <ExpansionPanelDetails>
+                    <form className={classes.root} noValidate autoComplete="off">
+                      <TextField id="standard-basic" value={city} label="Event City" onChange={(event) => setCity(event.target.value)} />
+                    </form>
+                  </ExpansionPanelDetails>
+                </ExpansionPanel>
+                <ExpansionPanel>
+                  <ExpansionPanelSummary
+                    expandIcon={<ExpandMoreIcon />}
+                    aria-controls="panel3a-content"
+                    id="panel3a-header"
+                  >
+                    <Typography className={classes.heading}>State</Typography>
+                  </ExpansionPanelSummary>
+                  <ExpansionPanelDetails>
+                    <StatesSelect setState={setState} />
+                  </ExpansionPanelDetails>
+                </ExpansionPanel>
+              </div>
+            )}
           </Grid>
         </DialogContent>
         <DialogActions>
