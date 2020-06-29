@@ -33,6 +33,7 @@ const Movement = ({
 
   const [buttonText, setButtonText] = useState('Follow this Movement');
   const [text, setText] = useState(false);
+  const [events, setEvents] = useState([]);
   const [emailClick, setEmailClick] = useState(false);
   const [leading, setLeading] = useState(false);
   const followersString = followers ? followers.toLocaleString() : 0;
@@ -71,6 +72,14 @@ const Movement = ({
           if (isFollowing) {
             setButtonText('Following ✓');
           }
+        });
+      axios.get(`/event/movement/${id}`)
+        .then((eventColl) => {
+          console.log('in movement, eventColl', eventColl);
+          setEvents(eventColl.data);
+        })
+        .catch((err) => {
+          console.error('Error pulling events to client for movement:', err);
         });
     }
   }, []);
@@ -133,7 +142,7 @@ const Movement = ({
 
       <div className="m-8">
         <div>
-          <EventCreateDialog isCreator={leading} user={user} moveId={id} />
+          <EventCreateDialog isCreator={leading} user={user} moveId={id} events={events} />
 
           {/* conditionally render follow button if user is logged in */}
           {user && (
