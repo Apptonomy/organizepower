@@ -5,6 +5,7 @@ const {
   getAllEventsForMovement,
   addRSVP,
   addRSVPCount,
+  getMovementsRSVPByUser,
 } = require('../db/methods');
 
 const eventRouter = Router();
@@ -12,8 +13,8 @@ const eventRouter = Router();
 // this route will get all the events for the eventLists
 eventRouter.get('/movement/:id', (req, res) => {
   const { id } = req.params || {};
-  // unstring the id to a number and remove the colon
-  const moveId = parseFloat(id.slice(1));
+  // unstring the id to a number
+  const moveId = parseFloat(id);
   // get all the events from the database
   getAllEventsForMovement(moveId)
     .then(events => {
@@ -41,11 +42,25 @@ eventRouter.get('/:id', (req, res) => {
     });
 });
 
+// get all events rsvped to by user
+eventRouter.get('/rsvp/:id', (req, res) => {
+  const { id } = req.params || {};
+  const userId = parseFloat(id);
+  getMovementsRSVPByUser(userId)
+    .then((events) => {
+      res.send(events);
+    })
+    .catch(err => {
+      console.error('Error GETting rsvp events for user:', err);
+      res.sendStatus(500);
+    });
+});
+
+// add an event to db
 eventRouter.post('/', (req, res) => {
-  const { eventObj } = req.body;
-  // add an event to db
-  addEvent(eventObj)
+  addEvent(req.body)
     .then(event => {
+      console.log('posted event', event);
       res.send(event);
     })
     .catch(err => {
@@ -67,8 +82,8 @@ eventRouter.post('/rsvp/:eventId/:userId', (req, res) => {
           console.error('Error POSTing to RSVPCount for event:', err);
         });
     })
-    .catch(() => {
-
+    .catch((err) => {
+      console.error('Error adding an rsvp to database:', err);
     });
 });
 
