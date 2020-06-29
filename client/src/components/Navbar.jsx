@@ -14,6 +14,7 @@ import Login from './Login.jsx';
 import Movement from './Movement.jsx';
 import SignUp from './SignUp.jsx';
 import PrivateRoute from './PrivateRoute.jsx';
+import Messages from './Messages.jsx';
 import CreateGroup from './CreateGroup.jsx';
 import Group from './Group.jsx';
 
@@ -80,6 +81,9 @@ const Navbar = () => {
               </NavLink>
               <NavLink to={`/profile/${userId}`} className="block mt-4 lg:inline-block lg:mt-0 text-gray-400 hover:text-white mr-4">
                 PROFILE
+              </NavLink>
+              <NavLink to={`/messages/${userId}`} className="block mt-4 lg:inline-block lg:mt-0 text-gray-400 hover:text-white mr-4">
+                MESSAGES
               </NavLink>
               {!isAuthenticated
                 && (
@@ -159,6 +163,15 @@ const Navbar = () => {
             user={user}
             handleMovementTitleClick={handleMovementTitleClick}
             isAuthenticated={isAuthenticated}
+          />
+          <Route
+            exact
+            path={`/messages/${userId}`}
+            render={() => (
+              <Messages
+                user={user}
+              />
+            )}
           />
           <Route
             exact

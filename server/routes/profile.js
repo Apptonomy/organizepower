@@ -1,11 +1,44 @@
 const { Router } = require('express');
 const {
+  getAllUsers,
+  getUserByUsername,
   getUserById,
   getMovementsFollowedByUser,
   getMovementsLedByUser,
 } = require('../db/methods');
 
 const profileRouter = Router();
+
+profileRouter.get('/:username', (req, res) => {
+  const {
+    username,
+  } = req.params;
+  getUserByUsername(username)
+    .then((user) => {
+      res.send(user);
+    })
+    .catch(err => {
+      console.error(err);
+      res.sendStatus(500);
+    });
+});
+
+profileRouter.get('/all/users', (req, res) => {
+  console.log(req);
+  getAllUsers()
+    .then((users) => {
+      // strip the hash and salt from each user for safety
+      users.forEach((user) => {
+        user.salt = null;
+        user.hash = null;
+      });
+      res.send(users);
+    })
+    .catch(err => {
+      console.error(err);
+      res.sendStatus(500);
+    });
+});
 
 profileRouter.get('/:id', (req, res) => {
   const { id } = req.params || {};
