@@ -48,7 +48,6 @@ const Navbar = () => {
     console.log(groupId);
     axios.get(`/group/:${groupId}`)
       .then(res => {
-        
         console.log(res, 'handleGroup');
         setCurrentGroup(res.data);
       })
