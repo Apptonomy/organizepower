@@ -3,6 +3,7 @@ import moment from 'moment';
 import { Link } from 'react-router-dom';
 import MovementList from './MovementList.jsx';
 import StartMovement from './StartMovement.jsx';
+import StartMovementAsGroup from './StartMovementAsGroup.jsx';
 import { getMovementsLeading, getMovementsFollowing } from '../services/services';
 
 const Profile = ({ user, handleMovementTitleClick }) => {
@@ -17,6 +18,7 @@ const Profile = ({ user, handleMovementTitleClick }) => {
   } = user;
 
   const [startMovementClicked, setStartMovementClicked] = useState(false);
+  const [startMovementAsGroupClicked, setStartMovementAsGroupClicked] = useState(false);
   const [movementsLeading, setMovementsLeading] = useState([]);
   const [movementsFollowing, setMovementsFollowing] = useState([]);
   const [toExplore, setToExplore] = useState(false);
@@ -51,6 +53,7 @@ const Profile = ({ user, handleMovementTitleClick }) => {
 
         <div className="m-4">
           <button onClick={() => setStartMovementClicked(!startMovementClicked)} className="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 mb-8 border border-gray-400 rounded shadow mr-4">Start a Movement</button>
+          <button onClick={() => setStartMovementAsGroupClicked(!startMovementAsGroupClicked)} className="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 mb-8 border border-gray-400 rounded shadow mr-4">Start a Movement as Group</button>
           <Link to="/explore"><button className="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 mb-8 border border-gray-400 rounded shadow mr-4">Join a Movement</button></Link>
           {startMovementClicked && (
             <div className="">
@@ -60,6 +63,15 @@ const Profile = ({ user, handleMovementTitleClick }) => {
                 setStartMovementClicked={setStartMovementClicked}
               />
             </div>
+          )}
+          {startMovementAsGroupClicked && (
+          <div className="">
+            <StartMovementAsGroup
+              user={user}
+              setMovementsLeading={setMovementsLeading}
+              setStartMovementClicked={setStartMovementClicked}
+            />
+          </div>
           )}
         </div>
       </div>

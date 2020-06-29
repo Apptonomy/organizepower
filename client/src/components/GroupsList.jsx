@@ -7,7 +7,7 @@ const GroupsList = ({
   handleGroupTitleClick,
 }) => {
   const [groupsAdmin, setGroupsAdmin] = useState([]);
-  //const [movementsFollowing, setMovementsFollowing] = useState([]);
+  // const [movementsFollowing, setMovementsFollowing] = useState([]);
   // get movements leading & following by user to pass to movement list item
   // useEffect(() => {
   //   if (user) {

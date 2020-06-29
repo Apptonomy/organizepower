@@ -1,7 +1,9 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable camelcase */
 const { Router } = require('express');
-const { addGroup, getGroupByName, getAllGroups } = require('../db/methods');
+const {
+  addGroup, getGroupByName, getAllGroups, getGroupById,
+} = require('../db/methods');
 
 const groupRouter = Router();
 
@@ -24,6 +26,15 @@ groupRouter.post('/', (req, res, next) => {
 groupRouter.get('/', (req, res, next) => {
   getAllGroups()
     .then(groups => res.send(groups))
+    .catch(err => console.error(err));
+});
+
+groupRouter.get('/:id', (req, res, next) => {
+  const { id } = req.params;
+  getGroupById(id)
+    .then(group => {
+      res.send(group);
+    })
     .catch(err => console.error(err));
 });
 

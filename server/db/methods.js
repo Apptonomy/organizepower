@@ -66,8 +66,16 @@ const getUserByUsername = async(username) => {
 
 const getGroupByName = async(groupName) => {
   try {
-    const gn = groupName;
     const group = await Group.findOne({ where: { groupName } });
+    return group;
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+const getGroupById = async(groupId) => {
+  try {
+    const group = await Group.findOne({ where: { id: groupId }, raw: true });
     return group;
   } catch (err) {
     console.error(err);
@@ -120,6 +128,19 @@ const addMovement = async(movementObj, userId) => {
   }
 };
 
+const addMovementAsGroup = async(movementObj) => {
+  // get the organizer's record
+  try {
+    const user = await User.findOne({ where: { id: userId } });
+    // create the movement
+    const movement = await Movement.create(movementObj);
+    // set the user (organizer) foreign key
+    movement.setUser(user);
+    return movement;
+  } catch (err) {
+    console.error(err);
+  }
+};
 // EDIT MOVEMENT BY FIELD
 const editMovementField = async(movementId, prop, newValue) => {
   try {
@@ -319,4 +340,6 @@ module.exports = {
   getComments,
   updateEmojiData,
   updateReplyData,
+  getAllGroups,
+  getGroupById,
 };

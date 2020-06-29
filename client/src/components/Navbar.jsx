@@ -15,6 +15,8 @@ import Movement from './Movement.jsx';
 import SignUp from './SignUp.jsx';
 import PrivateRoute from './PrivateRoute.jsx';
 import CreateGroup from './CreateGroup.jsx';
+import Group from './Group.jsx';
+
 
 import {
   // getMovementsLeading,
@@ -43,17 +45,18 @@ const Navbar = () => {
   }
 
   function handleGroupTitleClick(groupId) {
-    axios.get(`/movement/:${groupId}`)
+    console.log(groupId);
+    axios.get(`/group/:${groupId}`)
       .then(res => {
+        
+        console.log(res, 'handleGroup');
         setCurrentGroup(res.data);
       })
       .catch(err => {
         console.error(err);
       });
   }
-  const createGroup = () => {
-    console.log('hello');
-  };
+
   const handleLogout = () => {
     logout()
       .then(() => {
@@ -116,6 +119,18 @@ const Navbar = () => {
                 currentMovement={currentMovement}
                 setCurrentMovement={setCurrentMovement}
               />
+            )}
+          />
+          <Route
+            exact
+            path={`/group/${currentGroup.id}`}
+            render={() => (
+              <div> hello </div>
+              // <Group
+              //   user={user}
+              //   currentGroup={currentGroup}
+              //   setCurrentGroup={setCurrentGroup}
+              // />
             )}
           />
           <Route
