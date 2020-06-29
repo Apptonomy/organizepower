@@ -123,15 +123,6 @@ const CreateGroup = ({ user }) => {
             <textarea value={bio} onChange={(e) => setBio(e.target.value)} className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-bio" type="text" placeholder="Provide a brief description about your group..." />
           </div>
         </div>
-        <div className="flex flex-wrap -mx-3 mb-6">
-          <div className="w-full px-3">
-            <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" htmlFor="grid-bio">
-              Bio
-            </label>
-            <textarea value={bio} onChange={(e) => setBio(e.target.value)} className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-bio" type="text" placeholder="Provide a brief description about your group..." />
-          </div>
-        </div>
-        <button className="modal-close px-4 bg-indigo-500 p-3 rounded-lg text-white hover:bg-indigo-400" onClick={() => toggleAdmin()}>Are you an admin?</button>
 
         <input className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline m-2 float-right" type="submit" value="Create Group" onClick={handleCreateGroup} />
       </form>
