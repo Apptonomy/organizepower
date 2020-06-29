@@ -93,6 +93,22 @@ const Message = sequelize.define('message', {
   message: { type: DataTypes.STRING.BINARY, allowNull: true },
 }, { underscored: true });
 
+const Group = sequelize.define('group', {
+  name: { type: DataTypes.STRING, allowNull: false, unique: true },
+  adminId: { type: DataTypes.STRING, allowNull: false, unique: false },
+  adminName: { type: DataTypes.STRING, allowNull: false, unique: false },
+  location: { type: DataTypes.STRING, allowNull: true },
+  email: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  phoneNumber: { type: DataTypes.STRING },
+  imageUrl: { type: DataTypes.STRING },
+  bio: { type: DataTypes.TEXT },
+  lastLogin: { type: DataTypes.DATE },
+  status: { type: Sequelize.ENUM('active', 'inactive'), defaultValue: 'active' },
+}, { underscored: true }); // convert camelCase column names to snake_case in db
+
 const Movement = sequelize.define('movement', {
   // movement info
   name: { type: DataTypes.STRING, allowNull: false },
@@ -130,6 +146,30 @@ const UserMovement = sequelize.define('userMovement', {
 const Comment = sequelize.define('comment', {
   commentText: { type: DataTypes.STRING, allowNull: false },
   username: { type: DataTypes.STRING, allowNull: false },
+  emojiData: { type: DataTypes.STRING(1234), defaultValue: '[]' },
+  replyData: { type: DataTypes.STRING(1234), defaultValue: '[]' },
+}, { underscored: true });
+
+const Event = sequelize.define('event', {
+  // event info
+  name: { type: DataTypes.STRING, allowNull: false },
+  location: { type: DataTypes.STRING, allowNull: false },
+  time: { type: DataTypes.STRING, allowNull: false },
+  startDate: { type: DataTypes.STRING },
+  endDate: { type: DataTypes.STRING },
+  category: { type: DataTypes.STRING, allowNull: false },
+  description: { type: DataTypes.TEXT, allowNull: false },
+  rsvpCount: { type: DataTypes.INTEGER, allowNull: false },
+  imageUrl: { type: DataTypes.STRING },
+}, { underscored: true });
+
+// track which events a user 'rsvps' to
+const UserRsvp = sequelize.define('userRsvp', {
+  id: {
+    type: DataTypes.INTEGER,
+    primaryKey: true,
+    autoIncrement: true,
+  },
 }, { underscored: true });
 
 // sync sequelize to create tables in db before adding associations
@@ -165,11 +205,28 @@ Movement.belongsToMany(User, { through: UserMovement, foreignKey: 'id_movement' 
 Comment.belongsTo(Movement, { foreignKey: 'id_movement' });
 Comment.belongsTo(User, { foreignKey: 'id_user' });
 
+/* ////////////////////////////////////////////////////// */
+
+// An event belongs to one movement while a movement may have many events
+Movement.hasMany(Event, { as: 'event' });
+Event.belongsTo(Movement, {
+  foreignKey: 'id_movement',
+  as: 'movement',
+});
+
+// makes a join table between the users and events
+// 'through' key sets the name of the table: user_rsvp
+User.belongsToMany(Event, { through: UserRsvp });
+Event.belongsToMany(User, { through: UserRsvp });
+
 module.exports = {
   sequelize,
   User,
   Message,
+  Group,
   Movement,
+  Event,
+  UserRsvp,
   Comment,
   UserMovement,
 };

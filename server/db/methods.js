@@ -4,8 +4,11 @@ const {
   sequelize,
   User,
   Message,
+  Group,
   Movement,
   UserMovement,
+  Event,
+  UserRsvp,
   Comment,
 } = require('./index');
 
@@ -35,6 +38,26 @@ const addUser = async(userObj) => {
   }
 };
 
+// ADD A GROUP
+const addGroup = async(groupObj) => {
+  try {
+    await Group.create(groupObj);
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+const getAllGroups = async() => {
+  try {
+    const groups = await Group.findAll({
+      raw: true,
+    });
+    return groups;
+  } catch (err) {
+    console.error(err);
+  }
+};
+
 // GET USER BY USERNAME
 const getUserByUsername = async(username) => {
   try {
@@ -52,6 +75,24 @@ const getAllUsers = async() => {
     return users;
   } catch (err) {
     console.log(err);
+  }
+}
+
+const getGroupByName = async(groupName) => {
+  try {
+    const group = await Group.findOne({ where: { groupName } });
+    return group;
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+const getGroupById = async(groupId) => {
+  try {
+    const group = await Group.findOne({ where: { id: groupId }, raw: true });
+    return group;
+  } catch (err) {
+    console.error(err);
   }
 };
 
@@ -101,6 +142,19 @@ const addMovement = async(movementObj, userId) => {
   }
 };
 
+const addMovementAsGroup = async(movementObj) => {
+  // get the organizer's record
+  try {
+    const user = await User.findOne({ where: { id: userId } });
+    // create the movement
+    const movement = await Movement.create(movementObj);
+    // set the user (organizer) foreign key
+    movement.setUser(user);
+    return movement;
+  } catch (err) {
+    console.error(err);
+  }
+};
 // EDIT MOVEMENT BY FIELD
 const editMovementField = async(movementId, prop, newValue) => {
   try {
@@ -280,12 +334,111 @@ const sendUserMessage = async(messageObj) => {
     console.log(error);
   }
 };
+// add new event
+// one to many relationship
+const addEvent = async(eventObj) => {
+  try {
+    // create the event
+    const event = await Event.create(eventObj);
+    return event;
+  } catch (err) {
+    console.error('Error adding new event to the Database:', err);
+  }
+};
+
+// get event by id
+const getEvent = async(eventId) => {
+  try {
+    const event = await Event.findOne({
+      where: { id: eventId },
+      raw: true, // returns just the object from the db
+    });
+    return event;
+  } catch (err) {
+    console.error('Error getting single event by id:', err);
+  }
+};
+
+// get all events for a movement
+const getAllEventsForMovement = async(moveId) => {
+  try {
+    const events = await Event.findAll({
+      where: { id_movement: moveId },
+      raw: true,
+    });
+    return events;
+  } catch (err) {
+    console.error('Error getting all events for single movement:', err);
+  }
+};
+
+// ADD TO RSVP
+const addRSVP = async(userId, eventId) => {
+  try {
+    await UserRsvp.create({
+      user_id: userId,
+      event_id: eventId,
+    });
+  } catch (err) {
+    console.error('Error adding the user rsvp:', err);
+  }
+};
+
+// ADD TO RSVP COUNT
+const addRSVPCount = async(eventId) => {
+  try {
+    await Event.update({ RSVPCount: sequelize.literal('rsvp_count + 1') },
+      { where: { id: eventId } });
+  } catch (err) {
+    console.error('Error increasing rvsp count for event:', err);
+  }
+};
+
+// Find all events rsvped by user
+const getMovementsRSVPByUser = async(idUser) => {
+  try {
+    const eventIds = await UserRsvp.findAll({
+      attributes: ['event_id'],
+      where: { user_id: idUser },
+      raw: true,
+    });
+    if (eventIds.length > 0) {
+      const events = await Promise.all(
+        eventIds.map(({ event_id }) => getEvent(event_id)),
+      );
+      return events.filter(event => event.user_id !== idUser);
+    }
+  } catch (err) {
+    console.error('Error retrieving the events the user RSVPed to:', err);
+  }
+};
+
+const updateEmojiData = async(emojiString, id) => {
+  try {
+    await Comment.update({ emojiData: emojiString },
+      { where: { id } });
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+const updateReplyData = async(replyString, id) => {
+  try {
+    await Comment.update({ replyData: replyString },
+      { where: { id } });
+  } catch (err) {
+    console.error(err);
+  }
+};
 
 module.exports = {
 
   addMovement,
+  addEvent,
+  addRSVP,
   addPolitician,
   addUser,
+  addGroup,
   linkUserMovement,
   editMovement,
   editMovementField,
@@ -294,15 +447,24 @@ module.exports = {
   getUserById,
   getAllUsers,
   getUserByUsername,
+  getGroupByName,
   getMovement,
   getAllMovements,
   getMovementsLedByUser,
   getMovementsFollowedByUser,
+  getMovementsRSVPByUser,
+  getEvent,
+  getAllEventsForMovement,
   addEmailCount,
   addTextCount,
+  addRSVPCount,
   addFollower,
   addComment,
   getComments,
   getAllUserMessages,
   sendUserMessage,
+  updateEmojiData,
+  updateReplyData,
+  getAllGroups,
+  getGroupById,
 };

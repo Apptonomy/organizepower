@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import CommentList from './CommentList.jsx';
 
-// lead component for comment box 
+// lead component for comment box
 // recives props from Movement.jsx
 const Comments = ({ movement, user }) => {
   const { id } = movement;
@@ -14,7 +14,7 @@ const Comments = ({ movement, user }) => {
   useEffect(() => {
     axios.get('/comment', { params: { movementId: id } })
       .then((response) => {
-        setComments(response.data);
+        setComments(response.data.reverse());
       })
       .catch((err) => console.error(err));
   }, []);
@@ -31,7 +31,7 @@ const Comments = ({ movement, user }) => {
         // then we will get that data back from the db
         axios.get('/comment', { params: { movementId: id } })
           .then((response) => {
-            setComments(response.data);
+            setComments(response.data.reverse());
           })
           .catch((err) => console.error(err));
       })
@@ -57,7 +57,7 @@ const Comments = ({ movement, user }) => {
       )}
       <div className="commentBox">
         {/* if there are comments render the comment list component and pass down the comments */}
-        {areThereComments && (<CommentList comments={comments} />)}
+        {areThereComments && (<CommentList comments={comments} user={user} />)}
       </div>
     </div>
   );
