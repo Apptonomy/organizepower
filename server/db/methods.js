@@ -5,7 +5,7 @@ const {
   Movement,
   UserMovement,
   Event,
-  UserRSVP,
+  UserRsvp,
   Comment,
 } = require('./index');
 
@@ -250,11 +250,9 @@ const addPolitician = async(politicianObj) => {
 // add new event
 // one to many relationship
 const addEvent = async(eventObj) => {
-  // get the movement id
   try {
     // create the event
     const event = await Event.create(eventObj);
-    // remember to add the id_movement to the eventObj on the client side before sending it
     return event;
   } catch (err) {
     console.error('Error adding new event to the Database:', err);
@@ -278,7 +276,7 @@ const getEvent = async(eventId) => {
 const getAllEventsForMovement = async(moveId) => {
   try {
     const events = await Event.findAll({
-      where: { movement_id: moveId },
+      where: { id_movement: moveId },
       raw: true,
     });
     return events;
@@ -290,9 +288,9 @@ const getAllEventsForMovement = async(moveId) => {
 // ADD TO RSVP
 const addRSVP = async(userId, eventId) => {
   try {
-    await UserRSVP.create({
-      id_user: userId,
-      id_event: eventId,
+    await UserRsvp.create({
+      user_id: userId,
+      event_id: eventId,
     });
   } catch (err) {
     console.error('Error adding the user rsvp:', err);
@@ -312,15 +310,18 @@ const addRSVPCount = async(eventId) => {
 // Find all events rsvped by user
 const getMovementsRSVPByUser = async(idUser) => {
   try {
-    const eventIds = await UserRSVP.findAll({
-      attributes: ['id_event'],
-      where: { id_user: idUser },
+    const eventIds = await UserRsvp.findAll({
+      attributes: ['event_id'],
+      where: { user_id: idUser },
       raw: true,
     });
-    const events = await Promise.all(
-      eventIds.map(({ id_event }) => getEvent(id_event)),
-    );
-    return events.filter(event => event.id_user !== idUser);
+
+    if (eventIds.length > 0) {
+      const events = await Promise.all(
+        eventIds.map(({ event_id }) => getEvent(event_id)),
+      );
+      return events.filter(event => event.user_id !== idUser);
+    }
   } catch (err) {
     console.error('Error retrieving the events the user RSVPed to:', err);
   }
