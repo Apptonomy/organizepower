@@ -35,6 +35,7 @@ const GroupListItem = ({
     followers,
     emailCount,
     textCount,
+    adminName,
     polFirstName,
     polLastName,
     charName,
@@ -69,18 +70,8 @@ const GroupListItem = ({
           <p className="text-gray-700 text-base my-2">
             {location}
           </p>
-          {polFirstName && (
-          <p className="text-gray-700 text-base my-2">
-            Important Politician: {polFirstName} {polLastName}
-          </p>
-          )}
-          {charName && (
-            <p className="text-gray-700 text-base my-2">
-              Charity: {charName}
-            </p>
-          )}
           <p className="text-gray-500 text-sm my-2">
-            <i>{startedBy} started this movement</i>
+            <i>{adminName} is the Admin for this Group</i>
           </p>
           <p className="text-gray-700 text-base my-2">
             {shortDesc} . . . &nbsp;

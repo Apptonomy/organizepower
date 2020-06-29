@@ -27,6 +27,7 @@ const CreateGroup = ({ user }) => {
     // create user based on state of form
     const location = `${city}, ${state}`;
     const adminId = user.id;
+    const adminName = user.username;
     const group = {
       name,
       password,
@@ -36,6 +37,7 @@ const CreateGroup = ({ user }) => {
       imageUrl,
       bio,
       adminId,
+      adminName,
     };
     // post user to signup route, wait for message to return
     // invalidUser message implies user already exists
