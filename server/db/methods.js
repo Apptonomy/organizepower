@@ -5,6 +5,8 @@ const {
   Group,
   Movement,
   UserMovement,
+  Event,
+  UserRsvp,
   Comment,
 } = require('./index');
 
@@ -297,6 +299,83 @@ const addPolitician = async(politicianObj) => {
   }
 };
 
+// add new event
+// one to many relationship
+const addEvent = async(eventObj) => {
+  try {
+    // create the event
+    const event = await Event.create(eventObj);
+    return event;
+  } catch (err) {
+    console.error('Error adding new event to the Database:', err);
+  }
+};
+
+// get event by id
+const getEvent = async(eventId) => {
+  try {
+    const event = await Event.findOne({
+      where: { id: eventId },
+      raw: true, // returns just the object from the db
+    });
+    return event;
+  } catch (err) {
+    console.error('Error getting single event by id:', err);
+  }
+};
+
+// get all events for a movement
+const getAllEventsForMovement = async(moveId) => {
+  try {
+    const events = await Event.findAll({
+      where: { id_movement: moveId },
+      raw: true,
+    });
+    return events;
+  } catch (err) {
+    console.error('Error getting all events for single movement:', err);
+  }
+};
+
+// ADD TO RSVP
+const addRSVP = async(userId, eventId) => {
+  try {
+    await UserRsvp.create({
+      user_id: userId,
+      event_id: eventId,
+    });
+  } catch (err) {
+    console.error('Error adding the user rsvp:', err);
+  }
+};
+
+// ADD TO RSVP COUNT
+const addRSVPCount = async(eventId) => {
+  try {
+    await Event.update({ RSVPCount: sequelize.literal('rsvp_count + 1') },
+      { where: { id: eventId } });
+  } catch (err) {
+    console.error('Error increasing rvsp count for event:', err);
+  }
+};
+
+// Find all events rsvped by user
+const getMovementsRSVPByUser = async(idUser) => {
+  try {
+    const eventIds = await UserRsvp.findAll({
+      attributes: ['event_id'],
+      where: { user_id: idUser },
+      raw: true,
+    });
+
+    if (eventIds.length > 0) {
+      const events = await Promise.all(
+        eventIds.map(({ event_id }) => getEvent(event_id)),
+      );
+      return events.filter(event => event.user_id !== idUser);
+    }
+  } catch (err) {
+    console.error('Error retrieving the events the user RSVPed to:', err);
 const updateEmojiData = async(emojiString, id) => {
   try {
     await Comment.update({ emojiData: emojiString },
@@ -318,6 +397,8 @@ const updateReplyData = async(replyString, id) => {
 module.exports = {
 
   addMovement,
+  addEvent,
+  addRSVP,
   addPolitician,
   addUser,
   addGroup,
@@ -333,8 +414,12 @@ module.exports = {
   getAllMovements,
   getMovementsLedByUser,
   getMovementsFollowedByUser,
+  getMovementsRSVPByUser,
+  getEvent,
+  getAllEventsForMovement,
   addEmailCount,
   addTextCount,
+  addRSVPCount,
   addFollower,
   addComment,
   getComments,

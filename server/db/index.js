@@ -149,6 +149,28 @@ const Comment = sequelize.define('comment', {
   replyData: { type: DataTypes.STRING(1234), defaultValue: '[]' },
 }, { underscored: true });
 
+const Event = sequelize.define('event', {
+  // event info
+  name: { type: DataTypes.STRING, allowNull: false },
+  location: { type: DataTypes.STRING, allowNull: false },
+  time: { type: DataTypes.STRING, allowNull: false },
+  startDate: { type: DataTypes.STRING },
+  endDate: { type: DataTypes.STRING },
+  category: { type: DataTypes.STRING, allowNull: false },
+  description: { type: DataTypes.TEXT, allowNull: false },
+  rsvpCount: { type: DataTypes.INTEGER, allowNull: false },
+  imageUrl: { type: DataTypes.STRING },
+}, { underscored: true });
+
+// track which events a user 'rsvps' to
+const UserRsvp = sequelize.define('userRsvp', {
+  id: {
+    type: DataTypes.INTEGER,
+    primaryKey: true,
+    autoIncrement: true,
+  },
+}, { underscored: true });
+
 // sync sequelize to create tables in db before adding associations
 // { force: true } will drop and recreate the tables,
 // can be handy for dev but also dangerous:
@@ -173,11 +195,27 @@ Movement.belongsToMany(User, { through: UserMovement, foreignKey: 'id_movement' 
 Comment.belongsTo(Movement, { foreignKey: 'id_movement' });
 Comment.belongsTo(User, { foreignKey: 'id_user' });
 
+/* ////////////////////////////////////////////////////// */
+
+// An event belongs to one movement while a movement may have many events
+Movement.hasMany(Event, { as: 'event' });
+Event.belongsTo(Movement, {
+  foreignKey: 'id_movement',
+  as: 'movement',
+});
+
+// makes a join table between the users and events
+// 'through' key sets the name of the table: user_rsvp
+User.belongsToMany(Event, { through: UserRsvp });
+Event.belongsToMany(User, { through: UserRsvp });
+
 module.exports = {
   sequelize,
   User,
   Group,
   Movement,
+  Event,
+  UserRsvp,
   Comment,
   UserMovement,
 };

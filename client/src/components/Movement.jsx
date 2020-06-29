@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 import SendMessage from './SendMessage.jsx';
 import Comments from './Comments.jsx';
+import EventCreateDialog from './CreateEvent.jsx';
 import Charity from './Charity.jsx';
 import { getMovementsLeading, getMovementsFollowing } from '../services/services';
 import EditMovement from './EditMovement.jsx';
@@ -39,6 +40,7 @@ const Movement = ({
 
   const [buttonText, setButtonText] = useState('Follow this Movement');
   const [text, setText] = useState(false);
+  const [events, setEvents] = useState([]);
   const [emailClick, setEmailClick] = useState(false);
   const [leading, setLeading] = useState(false);
   const [edit, setEdit] = useState(false);
@@ -78,6 +80,14 @@ const Movement = ({
           if (isFollowing) {
             setButtonText('Following ✓');
           }
+        });
+      axios.get(`/event/movement/${id}`)
+        .then((eventColl) => {
+          console.log('in movement, eventColl', eventColl);
+          setEvents(eventColl.data);
+        })
+        .catch((err) => {
+          console.error('Error pulling events to client for movement:', err);
         });
     }
   }, []);
@@ -152,8 +162,11 @@ const Movement = ({
         </div>
         <Comments movement={currentMovement} user={user} />
       </div>
+
       <div className="m-8">
         <div>
+          <EventCreateDialog isCreator={leading} user={user} moveId={id} events={events} />
+
           {charDescription && charName && (
             <Charity
               page="movement"
