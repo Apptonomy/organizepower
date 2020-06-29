@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import moment from 'moment';
 import { Link } from 'react-router-dom';
 import MovementList from './MovementList.jsx';
 import StartMovement from './StartMovement.jsx';
-import MyCalendar from './Calendar.jsx';
 import { getMovementsLeading, getMovementsFollowing } from '../services/services';
 import FullScreenDialog from './CalendarWindow.jsx';
 
 const Profile = ({ user, handleMovementTitleClick }) => {
   const {
+    id,
     username,
     firstName,
     lastName,
@@ -21,6 +22,7 @@ const Profile = ({ user, handleMovementTitleClick }) => {
   const [startMovementClicked, setStartMovementClicked] = useState(false);
   const [movementsLeading, setMovementsLeading] = useState([]);
   const [movementsFollowing, setMovementsFollowing] = useState([]);
+  const [events, setEvents] = useState([]);
   const [toExplore, setToExplore] = useState(false);
 
   useEffect(() => {
@@ -32,6 +34,14 @@ const Profile = ({ user, handleMovementTitleClick }) => {
       getMovementsFollowing(user.id)
         .then(results => {
           setMovementsFollowing(results.data);
+        });
+      axios.get(`/event/rsvp/${id}`)
+        .then((eventColl) => {
+          console.log('in profile, eventColl', eventColl);
+          setEvents(eventColl.data);
+        })
+        .catch((err) => {
+          console.error('Error pulling events to client for movement:', err);
         });
     }
   }, []);
@@ -54,7 +64,7 @@ const Profile = ({ user, handleMovementTitleClick }) => {
         <div className="m-4">
           <button onClick={() => setStartMovementClicked(!startMovementClicked)} className="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 mb-8 border border-gray-400 rounded shadow mr-4">Start a Movement</button>
           <Link to="/explore"><button className="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 mb-8 border border-gray-400 rounded shadow mr-4">Join a Movement</button></Link>
-          <FullScreenDialog />
+          <FullScreenDialog events={events} />
           {startMovementClicked && (
             <div className="">
               <StartMovement
