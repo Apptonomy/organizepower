@@ -1,9 +1,7 @@
 /* eslint-disable camelcase */
-const { debug } = require('webpack');
 const {
   sequelize,
   User,
-  Message,
   Group,
   Movement,
   UserMovement,
@@ -67,16 +65,6 @@ const getUserByUsername = async(username) => {
     console.error(err);
   }
 };
-
-// GET ALL USERS
-const getAllUsers = async() => {
-  try {
-    const users = User.findAll();
-    return users;
-  } catch (err) {
-    console.log(err);
-  }
-}
 
 const getGroupByName = async(groupName) => {
   try {
@@ -311,29 +299,6 @@ const addPolitician = async(politicianObj) => {
   }
 };
 
-// Messages queries
-const getAllUserMessages = async(recipient_id, sender_id) => {
-  try {
-    return await Message.findAll({
-      // attributes: ['message'],
-      where: {
-        recipient_id,
-        sender_id,
-      },
-      raw: true,
-    });
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-const sendUserMessage = async(messageObj) => {
-  try {
-    await Message.create(messageObj);
-  } catch (error) {
-    console.log(error);
-  }
-};
 // add new event
 // one to many relationship
 const addEvent = async(eventObj) => {
@@ -402,6 +367,7 @@ const getMovementsRSVPByUser = async(idUser) => {
       where: { user_id: idUser },
       raw: true,
     });
+
     if (eventIds.length > 0) {
       const events = await Promise.all(
         eventIds.map(({ event_id }) => getEvent(event_id)),
@@ -410,9 +376,6 @@ const getMovementsRSVPByUser = async(idUser) => {
     }
   } catch (err) {
     console.error('Error retrieving the events the user RSVPed to:', err);
-  }
-};
-
 const updateEmojiData = async(emojiString, id) => {
   try {
     await Comment.update({ emojiData: emojiString },
@@ -445,7 +408,6 @@ module.exports = {
   editUser,
   editUserField,
   getUserById,
-  getAllUsers,
   getUserByUsername,
   getGroupByName,
   getMovement,
@@ -461,8 +423,6 @@ module.exports = {
   addFollower,
   addComment,
   getComments,
-  getAllUserMessages,
-  sendUserMessage,
   updateEmojiData,
   updateReplyData,
   getAllGroups,
