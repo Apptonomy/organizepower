@@ -4,7 +4,7 @@ An Operation Spark Greenfield Project developed by
 - [Kris Mason](https://github.com/masonkristopher)
 - [Neisha Rose](https://github.com/Neisha1618)
 - [Will Preble](https://github.com/wpreble1)
-- [Jerry McDonald] (https://github.com/JerryMcDonald)
+- [Jerry McDonald](https://github.com/JerryMcDonald)
 
 Current Deployment via [Google CLoud](https://cloud.google.com/)
 - https://op-version-3.uc.r.appspot.com/#/explore
